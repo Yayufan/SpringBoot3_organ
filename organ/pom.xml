@@ -10,11 +10,11 @@
         <relativePath /> <!-- lookup parent from repository -->
     </parent>
     <packaging>pom</packaging>
-    <groupId>tw.com</groupId>
-    <artifactId>sc-uro</artifactId>
+    <groupId>org.tw</groupId>
+    <artifactId>organ</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>sc-uro</name>
-    <description>新川醫療CMS系統</description>
+    <name>organ</name>
+    <description>器捐協會CMS系統</description>
     <properties>
         <java.version>17</java.version>
         <!-- 定義spring boot 啟動包的版本, 其他相對應常用依賴也是跟著這些版本走 -->
