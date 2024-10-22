@@ -38,7 +38,6 @@
     </properties>
 
     <dependencyManagement>
-
         <dependencies>
 
             <dependency>
@@ -61,6 +60,7 @@
                 <optional>true</optional>
                 <version>${spring.boot.start.version}</version>
             </dependency>
+            
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
