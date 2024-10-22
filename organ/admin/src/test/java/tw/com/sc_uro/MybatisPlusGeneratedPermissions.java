@@ -15,11 +15,8 @@ import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 import com.baomidou.mybatisplus.generator.fill.Column;
 
-/**
- * 這個生成測試類, 主要是後續開發中有新增table , 進行擴展使用的
- */
-public class MybatisPlusGeneratedBusinessReplenish {
-
+public class MybatisPlusGeneratedPermissions {
+	
 	//設置配置屬性
 
     /**
@@ -61,7 +58,7 @@ public class MybatisPlusGeneratedBusinessReplenish {
     /**
      * 包名(自行替換,通常三層中取前兩層,例:com.example.demo,取前兩層)
      */
-    private static final String PARENT = "tw.com.sc_uro";
+    private static final String PARENT = "tw.org.organ";
 
     /**
      * 业务名(自行替換,通常三層中取最後一層,代表某個業務功能)
@@ -88,10 +85,7 @@ public class MybatisPlusGeneratedBusinessReplenish {
 	
 	public static void main(String[] args) {
 		
-
-		//-------------------接下來是非system的表生成Java代碼--------------------------------------------
-		
-		//表結構對應Java包結構的建立
+		//權限表Java結構的建立,基本上應該只有像目前開發時會用到,之後應該就是直接引入寫好的了
 		FastAutoGenerator.create(
 				URL,
 				USER_NAME,
@@ -119,28 +113,28 @@ public class MybatisPlusGeneratedBusinessReplenish {
 	    //包配置
 	    .packageConfig(builder -> {
 	        builder.parent(PARENT) // 设置父包名
-	            .moduleName("") // 设置父包模块(業務)名,看情況設置,因為一設置,Controller路徑就多一層父包模块(業務)名
+	            .moduleName("system") // 设置父包模块(業務)名,看情況設置,因為一設置,Controller路徑就多一層父包模块(業務)名
 	            .entity("pojo.entity") // 重新設置實體類包名
 	        	//設置xml輸出位置
-	            .pathInfo(Collections.singletonMap(OutputFile.xml, PROJECT_MODEL + File.separator + MAPPER)); // 设置mapperXml生成路径
+	            .pathInfo(Collections.singletonMap(OutputFile.xml, PROJECT_MODEL + File.separator + SYS_MAPPER)); // 设置權限系統的 mapperXml生成路径
 	    })
 	    //策略配置
 	    .strategyConfig(builder -> {
-	    	// 设置需要生成的表名,排除system類的table
-	        builder.addInclude("articel","articel_category")
+	    	// 设置需要生成的表名,*為所有
+	        builder.addInclude("sys_user","sys_role","sys_menu","sys_user_role","sys_role_menu")
 	        
-	        .addTablePrefix() // 设置过滤表前缀,  sys_user設置成 user表,一般不用寫
+	        .addTablePrefix() // 设置过滤表前缀,  sys_user設置成 user表
 	        
 	        .controllerBuilder()
 	        	.enableRestStyle()
 	        	.enableHyphenStyle()
-	        	.enableFileOverride()  //controller層 原檔案覆蓋
+	        	.enableFileOverride()
 	        .mapperBuilder()
-	        	.enableFileOverride()  //mapper層 原檔案覆蓋
+	        	.enableFileOverride()
 	        //將默認的IService的I去掉
 	        .serviceBuilder()
 	        	.formatServiceFileName("%sService")
-	        	.enableFileOverride()  //service層 原檔案覆蓋
+	        	.enableFileOverride()
 	        
 	        .entityBuilder()
 	        	// 开启生成实体时生成字段注解
@@ -152,11 +146,11 @@ public class MybatisPlusGeneratedBusinessReplenish {
                 // 逻辑删除属性名(实体)
                 .logicDeletePropertyName("isDeleted")
                 //覆蓋現有文件
-	        	.enableFileOverride()  //entity層 原檔案覆蓋
+	        	.enableFileOverride()
 	        	//自動填充屬性值,create_time 在新增數據時填充
 		        .addTableFills(new Column("create_time", FieldFill.INSERT))
-		        //自動填充屬性值,update_time 在更新數據時填充
-		        .addTableFills(new Column("update_time", FieldFill.UPDATE));
+		        //自動填充屬性值,create_time 在更新數據時填充
+		        .addTableFills(new Column("update_time", FieldFill.INSERT_UPDATE));
 	        
 	        // .build();
 	        
@@ -165,11 +159,10 @@ public class MybatisPlusGeneratedBusinessReplenish {
 	    .execute();
 		
 		
-		
 	}
 	
 	
 	
 	
-	
+    
 }
