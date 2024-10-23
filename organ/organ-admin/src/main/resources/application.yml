@@ -168,7 +168,7 @@ springdoc:
       #  文檔群組名default, 匹配路徑為根路徑任意開頭映射路徑(Controller),掃描包為com.example
     - group: 'default'
       paths-to-match: '/**'
-      # 掃描包
+      # 掃描包  tw.org.organ
       packages-to-scan: tw.org.organ
       
 #      #  以下為多個model的Controller層文檔分層,有需要再開啟

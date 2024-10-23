@@ -195,6 +195,6 @@
     </build>
 
     <modules>
-        <module>admin</module>
+        <module>organ-admin</module>
     </modules>
 </project>
