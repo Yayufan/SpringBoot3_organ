@@ -21,13 +21,14 @@ public class InsertArticleDTO {
     @Schema(description = "文章類型")
     private String type;
     
-	@JsonFormat(pattern = "yyyy-MM-dd")
-	@Schema(description = "公告此消息的日期")
-	private LocalDate announcementDate;
-    
 	@NotBlank
     @Schema(description = "文章標題")
     private String title;
+    
+	@JsonFormat(pattern = "yyyy-MM-dd")
+	@Schema(description = "公告此消息的日期")
+	private LocalDate announcementDate;
+
 	
     @Schema(description = "文章描述")
     private String description;
