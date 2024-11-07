@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +37,9 @@ import tw.org.organ.utils.MinioUtil;
 public class CKUploadImgController {
 
 	private final MinioUtil minioUtil;
+	
+	@Value("${minio.bucketName}")
+	private String minioBucketName;
 
 	@Operation(summary = "上傳CKEditor需要的檔案")
 	@Parameters({
@@ -46,7 +50,7 @@ public class CKUploadImgController {
 			@RequestParam("file") MultipartFile[] file) {
 
 		// 調用封裝好的工具類,獲得一個字符串List
-		List<String> imgUrlList = minioUtil.upload("scuro", scope + "/", file);
+		List<String> imgUrlList = minioUtil.upload(minioBucketName, scope + "/", file);
 		// 因為CKEditor upload都是單個圖檔,所以這邊一定只有一個元素
 		String imgUrl = imgUrlList.get(0);
 
@@ -54,7 +58,7 @@ public class CKUploadImgController {
 		HashMap<String, Object> hashMap = new HashMap<>();
 		// hashMap.put("url",
 		// "https://miro.medium.com/v2/resize:fit:582/1*4j2A9niz0eq-mRaCPUffpg.png");
-		imgUrl = "/scuro/" + imgUrl;
+		imgUrl = "/" + minioBucketName + "/" + imgUrl;
 		System.out.println(imgUrl);
 
 		hashMap.put("url", imgUrl);

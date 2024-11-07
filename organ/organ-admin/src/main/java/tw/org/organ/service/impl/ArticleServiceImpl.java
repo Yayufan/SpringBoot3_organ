@@ -42,7 +42,7 @@ import tw.org.organ.utils.MinioUtil;
 @RequiredArgsConstructor
 public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> implements ArticleService {
 
-	private static final String DEFAULT_IMAGE_PATH = "/scuro/default-image/cta-img-1.jpg";
+	private static final String DEFAULT_IMAGE_PATH = "/organ/default-image/cta-img-1.jpg";
 
 	@Value("${minio.bucketName}")
 	private String minioBucketName;
