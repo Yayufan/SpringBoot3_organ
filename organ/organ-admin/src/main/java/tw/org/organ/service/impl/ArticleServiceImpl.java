@@ -179,6 +179,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 			// 沒有檔案,直接處理數據
 			// 將類別名稱放入對象中
 			article.setType(typeName);
+			article.setCoverThumbnailUrl(DEFAULT_IMAGE_PATH);
 			baseMapper.insert(article);
 		}
 
