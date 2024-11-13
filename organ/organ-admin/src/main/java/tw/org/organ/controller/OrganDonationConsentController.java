@@ -83,10 +83,8 @@ public class OrganDonationConsentController {
 		IPage<OrganDonationConsent> organDonationConsentList;
 
 		if (Strings.isNullOrEmpty(queryText)) {
-			System.out.println("查詢為null或空字串");
 			organDonationConsentList = organDonationConsentService.getAllOrganDonationConsentByStatus(pageInfo, status);
 		} else {
-			System.out.println("查詢有值");
 			organDonationConsentList = organDonationConsentService.getAllOrganDonationConsentByStatus(pageInfo, status,
 					queryText);
 		}

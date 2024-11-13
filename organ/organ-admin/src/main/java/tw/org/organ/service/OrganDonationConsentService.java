@@ -1,16 +1,14 @@
 package tw.org.organ.service;
 
-import tw.org.organ.pojo.DTO.InsertOrganDonationConsentDTO;
-import tw.org.organ.pojo.DTO.UpdateMemberDTO;
-import tw.org.organ.pojo.DTO.UpdateOrganDonationConsentDTO;
-import tw.org.organ.pojo.entity.Member;
-import tw.org.organ.pojo.entity.OrganDonationConsent;
-
 import java.util.List;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import tw.org.organ.pojo.DTO.InsertOrganDonationConsentDTO;
+import tw.org.organ.pojo.DTO.UpdateOrganDonationConsentDTO;
+import tw.org.organ.pojo.entity.OrganDonationConsent;
 
 /**
  * <p>
