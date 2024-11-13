@@ -32,7 +32,7 @@ public class MybatisPlusGeneratedBusiness {
     /**
      * jdbc 路径(自行替換)
      */
-    private static final String URL = "jdbc:mariadb://192.168.56.1:3306/scuro";
+    private static final String URL = "jdbc:mariadb://192.168.56.1:3306/organ";
 
     /**
      * 数据库账号(自行替換)

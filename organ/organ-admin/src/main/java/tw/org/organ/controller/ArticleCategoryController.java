@@ -67,7 +67,7 @@ public class ArticleCategoryController {
 	@SaCheckLogin
 	@PostMapping
 	public R<Void> saveArticleCategory(
-			@RequestBody InsertArticleCategoryDTO insertArticleCategoryDTO) {
+			@Validated @RequestBody InsertArticleCategoryDTO insertArticleCategoryDTO) {
 		articleCategoryService.insertArticleCategory(insertArticleCategoryDTO);
 		return R.ok();
 

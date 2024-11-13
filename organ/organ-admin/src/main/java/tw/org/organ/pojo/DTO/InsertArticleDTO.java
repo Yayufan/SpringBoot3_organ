@@ -29,7 +29,6 @@ public class InsertArticleDTO {
 	@Schema(description = "公告此消息的日期")
 	private LocalDate announcementDate;
 
-	
     @Schema(description = "文章描述")
     private String description;
 	

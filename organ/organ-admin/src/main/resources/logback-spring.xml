@@ -9,23 +9,23 @@ debug：当此属性设置为true时，将打印出logback内部日志信息，�
 -->
 <configuration>
     <include resource="org/springframework/boot/logging/logback/defaults.xml" />
-    
+
     <!-- 
     定义变量，通过property元素可定义变量。
     它有name和value两个属性。变量可以使“${name}”来使用变量。
     作用类似于代码中的常量字符串，定义之后公共地方便可以统一使用
     如日志文件名称前缀、日志路径、日志输出格式等。
     -->
-      
+
     <!-- 定义日志文件名称 -->
-    <property name="APP_NAME" value="sc-uro" />
+    <property name="APP_NAME" value="organ" />
     <!-- 定义日志文件的路径 
-        Windows會放在C:\Users\Joey\sc-uro\logs 
-        Linux應該會放在/home/使用者/sc-uro/logs 下 ; 使用者要看你把應用放在哪
+        Windows會放在C:\Users\Joey\organ\logs 
+        Linux應該會放在/home/使用者/organ/logs 下 ; 使用者要看你把應用放在哪
     -->
     <property name="LOG_PATH" value="${user.home}/${APP_NAME}/logs" />
     <!-- 定义日志的文件名 -->
-    <property name="LOG_FILE" value="${LOG_PATH}/sc-uro.log" />
+    <property name="LOG_FILE" value="${LOG_PATH}/organ.log" />
 
     <!--
     appender的属性有name和class。name指定appender名称，后面使用该appender是也是通过名称来指定。
@@ -35,10 +35,8 @@ debug：当此属性设置为true时，将打印出logback内部日志信息，�
     ConsoleAppender：日志输出到控制台，类名ch.qos.logback.core.ConsoleAppender。
     
     FileAppender：日志输入到文件，类名ch.qos.logback.core.FileAppender。
-    
     RollingFileAppender：滚动记录文件，FileAppender的子类，当符合条件（大小、时间），日志进行切分处理。类名：ch.qos.logback.core.rolling.RollingFileAppender。
     appender元素可以包含零个或一个layout元素，零个或多个encoder元素以及零个或多个filter元素。
-
     实战中ConsoleAppender及RollingFileAppender使用较多，若需要自定义如把日志输出到消息队列，可以自定义实现AppenderBase接口。
     
       -->

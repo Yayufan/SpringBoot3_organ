@@ -141,7 +141,7 @@ public class ArticleController {
 	@PostMapping
 	public R<Long> saveArticle(
 			@Parameter(description = "縮略圖文件") @RequestPart(value = "file", required = false) MultipartFile[] files,
-			@RequestPart("data") InsertArticleDTO insertArticleDTO) {
+			@Validated @RequestPart("data") InsertArticleDTO insertArticleDTO) {
 		Long articleId = articleService.insertArticle(insertArticleDTO, files);
 		return R.ok(articleId);
 

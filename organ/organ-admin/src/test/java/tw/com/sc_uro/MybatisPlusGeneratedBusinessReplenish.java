@@ -35,7 +35,7 @@ public class MybatisPlusGeneratedBusinessReplenish {
     /**
      * jdbc 路径(自行替換)
      */
-    private static final String URL = "jdbc:mariadb://192.168.56.1:3306/scuro";
+    private static final String URL = "jdbc:mariadb://192.168.56.1:3306/organ";
 
     /**
      * 数据库账号(自行替換)
@@ -127,7 +127,7 @@ public class MybatisPlusGeneratedBusinessReplenish {
 	    //策略配置
 	    .strategyConfig(builder -> {
 	    	// 设置需要生成的表名,排除system類的table
-	        builder.addInclude("articel","articel_category")
+	        builder.addInclude("organ_donation_consent")
 	        
 	        .addTablePrefix() // 设置过滤表前缀,  sys_user設置成 user表,一般不用寫
 	        
