@@ -35,10 +35,8 @@ public class OrganDonationConsentController {
 	@Operation(summary = "線上填寫器捐同意書")
 	public R<InsertOrganDonationConsentDTO> saveOrganDonationConsent(
 			@Validated @RequestBody InsertOrganDonationConsentDTO insertOrganDonationConsentDTO) {
-		System.out.println(insertOrganDonationConsentDTO);
 		
 		organDonationConsentService.insertOrganDonationConsent(insertOrganDonationConsentDTO);
-		
 		return R.ok();
 	}
 	
