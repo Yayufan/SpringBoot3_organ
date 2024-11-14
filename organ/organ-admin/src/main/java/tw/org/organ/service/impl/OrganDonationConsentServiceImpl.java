@@ -48,7 +48,11 @@ public class OrganDonationConsentServiceImpl extends ServiceImpl<OrganDonationCo
 
 	@Override
 	public IPage<OrganDonationConsent> getAllOrganDonationConsent(Page<OrganDonationConsent> page) {
-		Page<OrganDonationConsent> organDonationConsentList = baseMapper.selectPage(page, null);
+		LambdaQueryWrapper<OrganDonationConsent> organDonationConsentQueryWrapper = new LambdaQueryWrapper<>();
+		organDonationConsentQueryWrapper.orderByDesc(OrganDonationConsent::getOrganDonationConsentId);
+
+		Page<OrganDonationConsent> organDonationConsentList = baseMapper.selectPage(page,
+				organDonationConsentQueryWrapper);
 		return organDonationConsentList;
 	}
 
@@ -56,7 +60,8 @@ public class OrganDonationConsentServiceImpl extends ServiceImpl<OrganDonationCo
 	public IPage<OrganDonationConsent> getAllOrganDonationConsentByStatus(Page<OrganDonationConsent> page,
 			String status) {
 		LambdaQueryWrapper<OrganDonationConsent> organDonationConsentQueryWrapper = new LambdaQueryWrapper<>();
-		organDonationConsentQueryWrapper.eq(OrganDonationConsent::getStatus, status);
+		organDonationConsentQueryWrapper.eq(OrganDonationConsent::getStatus, status)
+				.orderByDesc(OrganDonationConsent::getOrganDonationConsentId);
 
 		Page<OrganDonationConsent> organDonationConsentList = baseMapper.selectPage(page,
 				organDonationConsentQueryWrapper);
@@ -70,7 +75,8 @@ public class OrganDonationConsentServiceImpl extends ServiceImpl<OrganDonationCo
 		organDonationConsentQueryWrapper.eq(OrganDonationConsent::getStatus, status)
 				.like(OrganDonationConsent::getName, queryText).or().like(OrganDonationConsent::getIdCard, queryText)
 				.or().like(OrganDonationConsent::getContactNumber, queryText).or()
-				.like(OrganDonationConsent::getPhoneNumber, queryText);
+				.like(OrganDonationConsent::getPhoneNumber, queryText)
+				.orderByDesc(OrganDonationConsent::getOrganDonationConsentId);
 
 		Page<OrganDonationConsent> organDonationConsentList = baseMapper.selectPage(page,
 				organDonationConsentQueryWrapper);
