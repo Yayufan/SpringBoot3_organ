@@ -44,16 +44,7 @@ public interface OrganDonationConsentService extends IService<OrganDonationConse
 	IPage<OrganDonationConsent> getAllOrganDonationConsent(Page<OrganDonationConsent> page);
 
 	/**
-	 * 獲取某個狀態下的全部同意書(分頁)
-	 * 
-	 * @param page
-	 * @param status
-	 * @return
-	 */
-	IPage<OrganDonationConsent> getAllOrganDonationConsentByStatus(Page<OrganDonationConsent> page, String status);
-
-	/**
-	 * 獲取某個狀態下,以及符合查詢條件的全部同意書(分頁)
+	 * 獲取符合查詢條件的全部同意書(分頁)
 	 * 
 	 * @param page
 	 * @param status
@@ -98,5 +89,19 @@ public interface OrganDonationConsentService extends IService<OrganDonationConse
 	 * @param updateMemberDTOList
 	 */
 	void updateOrganDonationConsent(List<UpdateOrganDonationConsentDTO> updateOrganDonationConsentDTOList);
+
+	/**
+	 * 根據ID刪除同意書
+	 * 
+	 * @param organDonationConsentId
+	 */
+	void deleteOrganDonationConsent(Long organDonationConsentId);
+
+	/**
+	 * 根據ID List 刪除同意書
+	 * 
+	 * @param organDonationConsentIdList
+	 */
+	void deleteOrganDonationConsent(List<Long> organDonationConsentIdList);
 
 }

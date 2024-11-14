@@ -3,6 +3,7 @@ package tw.org.organ.controller;
 import java.util.List;
 
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +23,9 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import tw.org.organ.pojo.DTO.InsertOrganDonationConsentDTO;
 import tw.org.organ.pojo.DTO.UpdateOrganDonationConsentDTO;
@@ -64,6 +67,7 @@ public class OrganDonationConsentController {
 	}
 
 	@GetMapping("pagination")
+	@SaCheckLogin
 	@Operation(summary = "查詢所有器捐同意書(分頁)")
 	public R<IPage<OrganDonationConsent>> getAllOrganDonationConsent(@RequestParam Integer page,
 			@RequestParam Integer size) {
@@ -75,19 +79,17 @@ public class OrganDonationConsentController {
 	}
 
 	@GetMapping("pagination-by-status")
+	@SaCheckLogin
 	@Operation(summary = "根據器捐同意書狀態,查詢符合的所有器捐同意書(分頁)")
-	public R<IPage<OrganDonationConsent>> getAllOrganDonationConsentByStatus(@RequestParam Integer page,
-			@RequestParam Integer size, @RequestParam String status, @RequestParam(required = false) String queryText) {
+	public R<IPage<OrganDonationConsent>> getAllOrganDonationConsentByQuery(@RequestParam Integer page,
+			@RequestParam Integer size, @RequestParam(required = false) String status,
+			@RequestParam(required = false) String queryText) {
 		Page<OrganDonationConsent> pageInfo = new Page<>(page, size);
 
 		IPage<OrganDonationConsent> organDonationConsentList;
 
-		if (Strings.isNullOrEmpty(queryText)) {
-			organDonationConsentList = organDonationConsentService.getAllOrganDonationConsentByStatus(pageInfo, status);
-		} else {
-			organDonationConsentList = organDonationConsentService.getAllOrganDonationConsentByStatus(pageInfo, status,
-					queryText);
-		}
+		organDonationConsentList = organDonationConsentService.getAllOrganDonationConsentByStatus(pageInfo, status,
+				queryText);
 
 		return R.ok(organDonationConsentList);
 	}
@@ -143,6 +145,26 @@ public class OrganDonationConsentController {
 		organDonationConsentService.updateOrganDonationConsent(updateOrganDonationConsentDTOList);
 		return R.ok();
 
+	}
+
+	@Operation(summary = "刪除同意書")
+	@Parameters({
+			@Parameter(name = "Authorization", description = "請求頭token,token-value開頭必須為Bearer ", required = true, in = ParameterIn.HEADER) })
+	@SaCheckLogin
+	@DeleteMapping("{id}")
+	public R<Void> deleteOrganDonationConsent(@PathVariable("id") Long organDonationConsentId) {
+		organDonationConsentService.deleteOrganDonationConsent(organDonationConsentId);
+		return R.ok();
+	}
+
+	@Operation(summary = "批量刪除同意書")
+	@Parameters({
+			@Parameter(name = "Authorization", description = "請求頭token,token-value開頭必須為Bearer ", required = true, in = ParameterIn.HEADER) })
+	@SaCheckLogin
+	@DeleteMapping()
+	public R<Void> batchDeleteOrganDonationConsent(@Valid @NotNull @RequestBody List<Long> organDonationConsentIdList) {
+		organDonationConsentService.deleteOrganDonationConsent(organDonationConsentIdList);
+		return R.ok();
 	}
 
 }

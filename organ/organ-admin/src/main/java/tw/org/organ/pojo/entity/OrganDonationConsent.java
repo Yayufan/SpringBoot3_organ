@@ -103,6 +103,7 @@ public class OrganDonationConsent implements Serializable {
     private String healthInsuranceCardAnnotation;
 
     @Schema(description = "健保卡加註日期")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @TableField("health_insurance_card_annotation_date")
     private LocalDate healthInsuranceCardAnnotationDate;
 

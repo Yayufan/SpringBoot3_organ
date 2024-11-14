@@ -3,6 +3,7 @@ package tw.org.organ.service.impl;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -58,24 +59,18 @@ public class OrganDonationConsentServiceImpl extends ServiceImpl<OrganDonationCo
 
 	@Override
 	public IPage<OrganDonationConsent> getAllOrganDonationConsentByStatus(Page<OrganDonationConsent> page,
-			String status) {
-		LambdaQueryWrapper<OrganDonationConsent> organDonationConsentQueryWrapper = new LambdaQueryWrapper<>();
-		organDonationConsentQueryWrapper.eq(OrganDonationConsent::getStatus, status)
-				.orderByDesc(OrganDonationConsent::getOrganDonationConsentId);
-
-		Page<OrganDonationConsent> organDonationConsentList = baseMapper.selectPage(page,
-				organDonationConsentQueryWrapper);
-		return organDonationConsentList;
-	}
-
-	@Override
-	public IPage<OrganDonationConsent> getAllOrganDonationConsentByStatus(Page<OrganDonationConsent> page,
 			String status, String queryText) {
+
 		LambdaQueryWrapper<OrganDonationConsent> organDonationConsentQueryWrapper = new LambdaQueryWrapper<>();
-		organDonationConsentQueryWrapper.eq(OrganDonationConsent::getStatus, status)
-				.like(OrganDonationConsent::getName, queryText).or().like(OrganDonationConsent::getIdCard, queryText)
-				.or().like(OrganDonationConsent::getContactNumber, queryText).or()
-				.like(OrganDonationConsent::getPhoneNumber, queryText)
+
+		// 如果 status 不為空字串、空格字串、Null 時才加入篩選條件
+		organDonationConsentQueryWrapper.eq(StringUtils.isNotBlank(status), OrganDonationConsent::getStatus, status)
+				// 當 queryText 不為空字串、空格字串、Null 時才加入篩選條件
+				.and(StringUtils.isNotBlank(queryText),
+						wrapper -> wrapper.like(OrganDonationConsent::getName, queryText).or()
+								.like(OrganDonationConsent::getIdCard, queryText).or()
+								.like(OrganDonationConsent::getContactNumber, queryText).or()
+								.like(OrganDonationConsent::getPhoneNumber, queryText))
 				.orderByDesc(OrganDonationConsent::getOrganDonationConsentId);
 
 		Page<OrganDonationConsent> organDonationConsentList = baseMapper.selectPage(page,
@@ -123,6 +118,16 @@ public class OrganDonationConsentServiceImpl extends ServiceImpl<OrganDonationCo
 			this.updateOrganDonationConsent(updateOrganDonationConsentDTO);
 		}
 
+	}
+
+	@Override
+	public void deleteOrganDonationConsent(Long organDonationConsentId) {
+		baseMapper.deleteById(organDonationConsentId);
+	}
+
+	@Override
+	public void deleteOrganDonationConsent(List<Long> organDonationConsentIdList) {
+		baseMapper.deleteBatchIds(organDonationConsentIdList);
 	}
 
 }
