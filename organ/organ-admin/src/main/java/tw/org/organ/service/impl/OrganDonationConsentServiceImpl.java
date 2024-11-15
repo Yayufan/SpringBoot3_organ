@@ -1,22 +1,28 @@
 package tw.org.organ.service.impl;
 
+import java.io.IOException;
+import java.net.URLEncoder;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.excel.EasyExcel;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import tw.org.organ.convert.OrganDonationConsentConvert;
 import tw.org.organ.mapper.OrganDonationConsentMapper;
 import tw.org.organ.pojo.DTO.InsertOrganDonationConsentDTO;
 import tw.org.organ.pojo.DTO.UpdateOrganDonationConsentDTO;
 import tw.org.organ.pojo.entity.OrganDonationConsent;
+import tw.org.organ.pojo.excelPojo.OrganDonationConsentExcel;
 import tw.org.organ.service.OrganDonationConsentService;
 
 /**
@@ -128,6 +134,12 @@ public class OrganDonationConsentServiceImpl extends ServiceImpl<OrganDonationCo
 	@Override
 	public void deleteOrganDonationConsent(List<Long> organDonationConsentIdList) {
 		baseMapper.deleteBatchIds(organDonationConsentIdList);
+	}
+
+	@Override
+	public void downloadExcel(HttpServletResponse response) throws IOException {
+
+
 	}
 
 }

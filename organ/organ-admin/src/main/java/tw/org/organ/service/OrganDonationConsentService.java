@@ -1,11 +1,13 @@
 package tw.org.organ.service;
 
+import java.io.IOException;
 import java.util.List;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import jakarta.servlet.http.HttpServletResponse;
 import tw.org.organ.pojo.DTO.InsertOrganDonationConsentDTO;
 import tw.org.organ.pojo.DTO.UpdateOrganDonationConsentDTO;
 import tw.org.organ.pojo.entity.OrganDonationConsent;
@@ -104,4 +106,12 @@ public interface OrganDonationConsentService extends IService<OrganDonationConse
 	 */
 	void deleteOrganDonationConsent(List<Long> organDonationConsentIdList);
 
+	
+	/**
+	 * 下載同意書的Excel列表
+	 * 
+	 * @param response
+	 * @throws IOException 
+	 */
+	void downloadExcel(HttpServletResponse response) throws IOException;
 }

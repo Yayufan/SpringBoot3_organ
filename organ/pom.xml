@@ -34,6 +34,8 @@
         <QRcode>3.5.3</QRcode>
         <jsoup>1.18.1</jsoup>
         <guava>33.2.1-jre</guava>
+        <easyExcel>4.0.0</easyExcel>
+        <commons-io-for-easyExcel>2.17.0</commons-io-for-easyExcel>
 
     </properties>
 
@@ -49,7 +51,7 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-mail</artifactId>
-                 <version>${spring.boot.start.version}</version>
+                <version>${spring.boot.start.version}</version>
             </dependency>
 
 
@@ -60,7 +62,7 @@
                 <optional>true</optional>
                 <version>${spring.boot.start.version}</version>
             </dependency>
-            
+
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
@@ -150,6 +152,25 @@
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>${guava}</version>
+            </dependency>
+
+            <!-- 阿里巴巴 EasyExcel 用於將資料庫資料轉成excle給人下載 -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>easyexcel</artifactId>
+                <version>${easyExcel}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons-io-for-easyExcel}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-compress</artifactId>
+                <version>1.27.1</version>
             </dependency>
 
             <!-- QRcode 產出 zxing 核心模塊 -->
