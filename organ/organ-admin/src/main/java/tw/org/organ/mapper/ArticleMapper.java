@@ -14,4 +14,7 @@ import tw.org.organ.pojo.entity.Article;
  */
 public interface ArticleMapper extends BaseMapper<Article> {
 
+	 // 獲取總瀏覽量
+    Long getViewCount();
+	
 }

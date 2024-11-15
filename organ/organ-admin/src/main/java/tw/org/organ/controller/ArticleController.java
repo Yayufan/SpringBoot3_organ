@@ -99,17 +99,18 @@ public class ArticleController {
 
 	@GetMapping("{group}/{catrgory}")
 	@Operation(summary = "查詢某個組別and類別所有文章")
-	public R<List<Article>> getAllArticleByCategory(@PathVariable("group") String group,@PathVariable("catrgory") Long catrgory) {
-		List<Article> articleList = articleService.getAllArticleByGroupAndCategory(group,catrgory);
+	public R<List<Article>> getAllArticleByCategory(@PathVariable("group") String group,
+			@PathVariable("catrgory") Long catrgory) {
+		List<Article> articleList = articleService.getAllArticleByGroupAndCategory(group, catrgory);
 		return R.ok(articleList);
 	}
 
 	@GetMapping("{group}/{catrgory}/pagination")
 	@Operation(summary = "查詢某個組別and類別所有文章(分頁)")
-	public R<IPage<Article>> getAllArticleByCategory(@PathVariable("group") String group,@PathVariable("catrgory") Long catrgory,
-			@RequestParam Integer page, @RequestParam Integer size) {
+	public R<IPage<Article>> getAllArticleByCategory(@PathVariable("group") String group,
+			@PathVariable("catrgory") Long catrgory, @RequestParam Integer page, @RequestParam Integer size) {
 		Page<Article> pageInfo = new Page<>(page, size);
-		IPage<Article> articleList = articleService.getAllArticleByGroupAndCategory(group,catrgory, pageInfo);
+		IPage<Article> articleList = articleService.getAllArticleByGroupAndCategory(group, catrgory, pageInfo);
 		return R.ok(articleList);
 	}
 
@@ -124,6 +125,13 @@ public class ArticleController {
 	@Operation(summary = "查詢某組別的文章總數")
 	public R<Long> getArticleCount(@PathVariable("group") String group) {
 		Long articleCount = articleService.getArticleCountByGroup(group);
+		return R.ok(articleCount);
+	}
+
+	@GetMapping("views-count")
+	@Operation(summary = "查詢所有文章的瀏覽總數")
+	public R<Long> getArticleViewsCount() {
+		Long articleCount = articleService.getArticleViewsCount();
 		return R.ok(articleCount);
 	}
 

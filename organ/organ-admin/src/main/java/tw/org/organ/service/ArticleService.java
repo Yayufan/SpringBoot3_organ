@@ -109,6 +109,13 @@ public interface ArticleService extends IService<Article> {
 	 */
 	Long getArticleCountByGroup(String group);
 
+	
+	/**
+	 * 獲取所有文章瀏覽量總數
+	 * 
+	 * @return
+	 */
+	Long getArticleViewsCount();
 
 	
 	/**

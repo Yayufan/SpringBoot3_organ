@@ -14,6 +14,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * <p>
@@ -25,6 +26,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@ToString
 @TableName("article")
 @Schema(name = "Article", description = "文章表 - 各個group的文章都儲存在這")
 public class Article implements Serializable {

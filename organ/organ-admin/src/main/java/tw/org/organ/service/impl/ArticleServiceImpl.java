@@ -139,11 +139,18 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 		// TODO Auto-generated method stub
 		LambdaQueryWrapper<Article> articleQueryWrapper = new LambdaQueryWrapper<>();
 		articleQueryWrapper.eq(Article::getGroupType, group);
+		
 		Long articleCount = baseMapper.selectCount(articleQueryWrapper);
 
 		return articleCount;
 	}
 
+	@Override
+	public Long getArticleViewsCount() {
+		Long viewCount = baseMapper.getViewCount();
+		return viewCount;
+	}
+	
 	@Override
 	public Long getArticleViewsCountByGroup(String group) {
 		// TODO Auto-generated method stub
@@ -543,5 +550,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 		}
 
 	}
+
+
 
 }
