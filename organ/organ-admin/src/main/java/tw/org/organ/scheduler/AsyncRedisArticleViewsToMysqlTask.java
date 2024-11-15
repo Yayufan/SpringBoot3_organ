@@ -19,7 +19,7 @@ public class AsyncRedisArticleViewsToMysqlTask {
 	private final RedissonClient redissonClient;
 
 	// 使用 Cron 表達式設置定時任務 (每分鐘第零秒執行此任務，測試時使用)
-	// @Scheduled(cron = "0 * * * * ?")
+//	@Scheduled(cron = "0 * * * * ?")
 	// 使用 Cron 表達式設置定時任務 (每天凌晨2點執行 cron = "0 0 2 * * ?" )
 	@Scheduled(cron = "0 0 2 * * ?")
 	public void runTaskWithCronExpression() {
