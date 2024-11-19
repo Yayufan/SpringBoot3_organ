@@ -1,9 +1,7 @@
 package tw.org.organ.controller;
 
 import java.io.IOException;
-import java.net.URLEncoder;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.alibaba.excel.EasyExcel;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
@@ -31,11 +28,9 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import tw.org.organ.convert.OrganDonationConsentConvert;
 import tw.org.organ.pojo.DTO.InsertOrganDonationConsentDTO;
 import tw.org.organ.pojo.DTO.UpdateOrganDonationConsentDTO;
 import tw.org.organ.pojo.entity.OrganDonationConsent;
-import tw.org.organ.pojo.excelPojo.OrganDonationConsentExcel;
 import tw.org.organ.service.OrganDonationConsentService;
 import tw.org.organ.utils.R;
 
@@ -55,8 +50,6 @@ import tw.org.organ.utils.R;
 public class OrganDonationConsentController {
 
 	private final OrganDonationConsentService organDonationConsentService;
-	private final OrganDonationConsentConvert organDonationConsentConvert;
-	
 
 	@GetMapping("{id}")
 	@Operation(summary = "查詢單一器捐同意書")
@@ -174,30 +167,12 @@ public class OrganDonationConsentController {
 		organDonationConsentService.deleteOrganDonationConsent(organDonationConsentIdList);
 		return R.ok();
 	}
-	
 
 	@Operation(summary = "下載同意書excel列表")
 	@SaCheckLogin
-    @GetMapping("/download-excel")
-    public void downloadExcel(HttpServletResponse response) throws IOException {
-		  // 这里注意 有同学反应使用swagger 会导致各种问题，请直接用浏览器或者用postman
-        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-        response.setCharacterEncoding("utf-8");
-        // 这里URLEncoder.encode可以防止中文乱码 当然和easyexcel没有关系
-        String fileName = URLEncoder.encode("测试", "UTF-8").replaceAll("\\+", "%20");
-        response.setHeader("Content-disposition", "attachment;filename*=utf-8''" + fileName + ".xlsx");
-        
-        List<OrganDonationConsent> allOrganDonationConsent = organDonationConsentService.getAllOrganDonationConsent();
-        List<OrganDonationConsentExcel> excelData = allOrganDonationConsent.stream().map(organDonationConsent -> {
-        	return organDonationConsentConvert.entityToExcel(organDonationConsent);
-        }).collect(Collectors.toList());
-        
-        System.out.println(excelData);
-        
-        EasyExcel.write(response.getOutputStream(), OrganDonationConsentExcel.class).sheet("模板").doWrite(excelData);
-    }
-	
-	
-	
+	@GetMapping("/download-excel")
+	public void downloadExcel(HttpServletResponse response) throws IOException {
+		organDonationConsentService.downloadExcel(response);
+	}
 
 }

@@ -12,9 +12,6 @@ import lombok.Data;
 @Data
 public class OrganDonationConsentExcel {
 
-	@ExcelProperty("ID")
-    private Long organDonationConsentId;
-
 	@ExcelProperty("簽署者姓名")
     private String name;
 

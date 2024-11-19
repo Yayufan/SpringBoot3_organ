@@ -139,6 +139,18 @@ public class OrganDonationConsentServiceImpl extends ServiceImpl<OrganDonationCo
 	@Override
 	public void downloadExcel(HttpServletResponse response) throws IOException {
 
+		response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+		response.setCharacterEncoding("utf-8");
+		// 这里URLEncoder.encode可以防止中文乱码 ， 和easyexcel没有关系
+		String fileName = URLEncoder.encode("測試", "UTF-8").replaceAll("\\+", "%20");
+		response.setHeader("Content-disposition", "attachment;filename*=" + fileName + ".xlsx");
+
+		List<OrganDonationConsent> allOrganDonationConsent = this.getAllOrganDonationConsent();
+		List<OrganDonationConsentExcel> excelData = allOrganDonationConsent.stream().map(organDonationConsent -> {
+			return organDonationConsentConvert.entityToExcel(organDonationConsent);
+		}).collect(Collectors.toList());
+
+		EasyExcel.write(response.getOutputStream(), OrganDonationConsentExcel.class).sheet("模板").doWrite(excelData);
 
 	}
 
