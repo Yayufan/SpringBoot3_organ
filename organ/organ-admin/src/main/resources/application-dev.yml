@@ -30,6 +30,7 @@ spring:
       ssl.enabled: false
       # clientName: "Joey"
       
+      
     
 #minio 分布式文件儲存服務,因為沒有實現的starter所以這邊配置主要是獲取屬性值而已
 minio:
