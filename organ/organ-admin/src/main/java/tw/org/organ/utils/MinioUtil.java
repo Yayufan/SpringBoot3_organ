@@ -165,7 +165,7 @@ public class MinioUtil {
 						// in 是通過MultipartFile對象獲取的文件的輸入流。
 						// 第二個參數 in.available() 表示文件的可用字節數。
 						// 第三個參數 -1 表示不限制上傳文件的大小。
-						.stream(in, in.available(), -1)
+						.stream(in, -1, -1)
 						// 這一行設置了上傳對象的Content-Type，這是指定上傳對象的MIME類型。
 						// file.getContentType() 返回的是通過MultipartFile對象獲取的文件的Content-Type。
 						.contentType(file.getContentType()).build());
