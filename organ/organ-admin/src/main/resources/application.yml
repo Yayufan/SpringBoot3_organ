@@ -29,8 +29,8 @@ spring:
     password: kamikazey0022
 
   #配置NoSQL
-  data:
-    redis:
+#  data:
+#    redis:
 #      # 地址,當前是用虛擬機的IP配的
 #      host: 192.168.56.1
 #      # 端口，默认为6379

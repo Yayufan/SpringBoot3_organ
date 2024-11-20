@@ -14,21 +14,26 @@ spring:
     password: kamikazey0022
 
   #配置NoSQL
-  data:
-    redis:
+  # data:
+    # redis:
       # 地址,當前是用虛擬機的IP配的
-      host: localhost
+      # host: localhost
       # 端口，默认为6379
-      port: 6379
+      # port: 6379
       # 数据库索引
-      database: 0
+      # database: 0
       # 密码(如没有密码请注释掉)
       # password:
       # 连接超时时间
-      timeout: 10s
+      # timeout: 10s
       # 是否开启ssl
-      ssl.enabled: false
+      # ssl.enabled: false
       # clientName: "Joey"
+      
+  redis:
+    redisson:
+      # redisson配置
+        file: classpath:redisson-prod.yml
       
     
 #minio 分布式文件儲存服務,因為沒有實現的starter所以這邊配置主要是獲取屬性值而已
