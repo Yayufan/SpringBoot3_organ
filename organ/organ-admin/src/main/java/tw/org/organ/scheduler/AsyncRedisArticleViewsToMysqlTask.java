@@ -2,11 +2,15 @@ package tw.org.organ.scheduler;
 
 import org.redisson.api.RKeys;
 import org.redisson.api.RedissonClient;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import tw.org.organ.mapper.ArticleMapper;
 import tw.org.organ.pojo.entity.Article;
@@ -16,8 +20,36 @@ import tw.org.organ.pojo.entity.Article;
 public class AsyncRedisArticleViewsToMysqlTask {
 
 	private final ArticleMapper articleMapper;
+	
+	
+	//redLockClient01  businessRedissonClient
+	@Qualifier("businessRedissonClient") 
 	private final RedissonClient redissonClient;
 
+	/**
+	 * 初始化測試使用spring 上下文
+	 */
+	
+	@Autowired
+	private ApplicationContext context;
+	
+	/**
+	 * 初始化測試,這個是用來判斷 lombok.config 搭配 @Qualifier是有生效的 
+	 * 
+	 * 
+	 */
+	
+	@PostConstruct
+	public void init() {
+	    Object proxy = context.getAutowireCapableBeanFactory().getBean("businessRedissonClient");
+	    if (proxy == redissonClient) {
+	        System.out.println("AsyncRedisArticleViewsToMysqlTask RedissonClient is indeed 'businessRedissonClient'.");
+	    } else {
+	        System.err.println("AsyncRedisArticleViewsToMysqlTask RedissonClient is not 'businessRedissonClient'.");
+	    }
+	}
+	
+	
 	// 使用 Cron 表達式設置定時任務 (每分鐘第零秒執行此任務，測試時使用)
 //	@Scheduled(cron = "0 * * * * ?")
 	// 使用 Cron 表達式設置定時任務 (每天凌晨2點執行 cron = "0 0 2 * * ?" )

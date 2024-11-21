@@ -5,8 +5,12 @@ import java.util.stream.StreamSupport;
 import org.redisson.api.RAtomicLong;
 import org.redisson.api.RKeys;
 import org.redisson.api.RedissonClient;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -18,12 +22,38 @@ import lombok.RequiredArgsConstructor;
  * @since 2024-09-10
  */
 @Component
-@RequiredArgsConstructor
+@RequiredArgsConstructor()
 public class ArticleViewsCounterUtil {
 
+	@Qualifier("businessRedissonClient") 
 	private final RedissonClient redissonClient;
+	
 	private final String keyPrefix = "Article";
-
+	
+	/**
+	 * 初始化測試使用spring 上下文
+	 */
+	
+	@Autowired
+	private ApplicationContext context;
+	
+	/**
+	 * 初始化測試,這個是用來判斷 lombok.config 搭配 @Qualifier是有生效的 
+	 * 
+	 * 
+	 */
+	
+	@PostConstruct
+	public void init() {
+	    Object proxy = context.getAutowireCapableBeanFactory().getBean("businessRedissonClient");
+	    if (proxy == redissonClient) {
+	        System.out.println("ArticleViewsCounterUtil redissonClient is indeed 'businessRedissonClient'.");
+	    } else {
+	        System.err.println("ArticleViewsCounterUtil redissonClient is not 'businessRedissonClient'.");
+	    }
+	}
+	
+	
 	/**
 	 * 提供類別及文章id, 將此文章放入redis 計數器,文章瀏覽量+1
 	 * 
