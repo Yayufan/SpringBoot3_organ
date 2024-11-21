@@ -28,51 +28,7 @@ spring:
     # 配置用戶密碼
     password: kamikazey0022
 
-  #配置NoSQL
-#  data:
-#    redis:
-#      # 地址,當前是用虛擬機的IP配的
-#      host: 192.168.56.1
-#      # 端口，默认为6379
-#      port: 6379
-#      # 数据库索引
-#      database: 0
-#      # 密码(如没有密码请注释掉)
-#      # password:
-#      # 连接超时时间
-#      timeout: 10s
-#      # 是否开启ssl
-#      ssl.enabled: false
-#      # clientName: "Joey"
-      
 
-  #redisson配置比較老,還沒跟上spring.data.redis, 按照源碼來看這樣配應該沒問題
-  #這邊比較需要注意的是,他會跟spring.data.redis 的host地址衝突(兩個會拼接), 所以要註解掉一個
-  #但是目前來說默認的配置就很夠用了,這樣配只是機器太爛才會這樣配
-  redis:
-    redisson:
-      # redisson配置
-        file: classpath:redisson.yml
-#      config: |
-#        singleServerConfig: 
-#          idleConnectionTimeout: 10000
-#          connectTimeout: 10000
-#          timeout: 3000
-#          retryAttempts: 3
-#          retryInterval: 1500
-#          subscriptionsPerConnection: 5
-#          clientName: Joey
-#          address: "redis://192.168.56.1:6379"
-#          subscriptionConnectionMinimumIdleSize: 1
-#          subscriptionConnectionPoolSize: 50
-#          connectionMinimumIdleSize: 24
-#          connectionPoolSize: 64        
-#          database: 2
-#          dnsMonitoringInterval: 5000
-#        threads: 4
-#        nettyThreads: 8
-#        codec: !<org.redisson.codec.Kryo5Codec> {}
-#        transportMode: "NIO"
 
   mail:
     host: smtp.gmail.com
@@ -86,7 +42,7 @@ spring:
           starttls:
             enable: true
 
-      
+
 
 mybatis-plus:
   # 說明:mybatis3後使用mapperLocations, XML路徑掃描配置,預設為classpath*:/mapper/**/*.xml
@@ -108,31 +64,36 @@ mybatis-plus:
     aggressiveLazyLoading: false
          
     
-# 目前這個配置用不到,這是若依的寫法,但是一樣可以用Redis
-# 預設的配置比目前的配置有更高的配置及並發量,以下配置是因應server很小台的情況
+# Redisson配置,需要搭配Config配置類使用,
+# 不使用全部使用yml自動配置是因為,當今天有需要業務redis , 分布式鎖redis , redis 集群之類的,手動配置更好實現
 redisson:
-  # redis key前缀
-  keyPrefix:
-  # 线程池数量
-  threads: 4
-  # Netty线程池数量
-  nettyThreads: 8
-  # 单节点配置
-  singleServerConfig:
-    # 客户端名称
-    clientName: "Joey"
-    # 最小空闲连接数
-    connectionMinimumIdleSize: 8
-    # 连接池大小
-    connectionPoolSize: 32
-    # 连接空闲超时，单位：毫秒
-    idleConnectionTimeout: 10000
-    # 命令等待超时，单位：毫秒
-    timeout: 3000
-    # 发布和订阅连接池大小
-    subscriptionConnectionPoolSize: 50
-    # 数据库编号
-    database: 2
+  address: "redis://192.168.56.1:6379"
+#  password: "yourpassword"  # 如果有密码的话
+  database: 0
+
+
+#  # redis key前缀
+#  keyPrefix:
+#  # 线程池数量
+#  threads: 4
+#  # Netty线程池数量
+#  nettyThreads: 8
+#  # 单节点配置
+#  singleServerConfig:
+#    # 客户端名称
+#    clientName: "Joey"
+#    # 最小空闲连接数
+#    connectionMinimumIdleSize: 8
+#    # 连接池大小
+#    connectionPoolSize: 32
+#    # 连接空闲超时，单位：毫秒
+#    idleConnectionTimeout: 10000
+#    # 命令等待超时，单位：毫秒
+#    timeout: 3000
+#    # 发布和订阅连接池大小
+#    subscriptionConnectionPoolSize: 50
+#    # 数据库编号
+#    database: 2
 
     
 ############## Sa-Token 配置 (文档: https://sa-token.cc) ##############

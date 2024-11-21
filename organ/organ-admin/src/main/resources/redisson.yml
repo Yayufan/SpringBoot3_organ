@@ -1,8 +1,0 @@
-# 单节点配置
-singleServerConfig:
-  # 数据库编号
-  database: 0
-  # 节点地址
-  address: redis://192.168.56.1:6379
-  # 密码,暫時沒有
-  # password: 
