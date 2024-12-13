@@ -30,7 +30,7 @@ minio:
 # Redisson配置,需要搭配Config配置類使用,
 # 不使用全部使用yml自動配置是因為,當今天有需要業務redis , 分布式鎖redis , redis 集群之類的,手動配置更好實現
 redisson:
-  address: "redis://192.168.56.1:6379"
+  address: "redis://localhost:6379"
 #  password: "yourpassword"  # 如果有密码的话
   database: 0
     
