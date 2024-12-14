@@ -36,6 +36,7 @@
         <guava>33.2.1-jre</guava>
         <easyExcel>4.0.0</easyExcel>
         <commons-io-for-easyExcel>2.17.0</commons-io-for-easyExcel>
+        <easy-captcha>1.6.2</easy-captcha>
 
     </properties>
 
@@ -192,6 +193,13 @@
                 <groupId>org.jsoup</groupId>
                 <artifactId>jsoup</artifactId>
                 <version>${jsoup}</version>
+            </dependency>
+
+            <!-- easy-captcha 驗證碼 -->
+            <dependency>
+                <groupId>com.github.whvcse</groupId>
+                <artifactId>easy-captcha</artifactId>
+                <version>${easy-captcha}</version>
             </dependency>
 
 

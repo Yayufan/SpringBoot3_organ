@@ -1,8 +1,13 @@
 package tw.org.organ.controller;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
+import org.redisson.api.RedissonClient;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.wf.captcha.SpecCaptcha;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import io.swagger.v3.oas.annotations.Operation;
@@ -49,7 +55,27 @@ import tw.org.organ.utils.R;
 @RequestMapping("/organ-donation-consent")
 public class OrganDonationConsentController {
 
+	@Qualifier("businessRedissonClient")
+	private final RedissonClient redissonClient;
+
 	private final OrganDonationConsentService organDonationConsentService;
+
+	@GetMapping("/captcha")
+	public R<HashMap<Object, Object>> captcha() {
+		SpecCaptcha specCaptcha = new SpecCaptcha(130, 50, 5);
+		String verCode = specCaptcha.text().toLowerCase();
+		String key = "Captcha:" + UUID.randomUUID().toString();
+		// 明確調用String類型的Bucket,存入String類型的Value 進redis並設置過期時間為10分鐘
+		redissonClient.<String>getBucket(key).set(verCode, 10, TimeUnit.MINUTES);
+
+		// 将key和base64返回给前端
+		HashMap<Object, Object> hashMap = new HashMap<>();
+		hashMap.put("key", key);
+		hashMap.put("image", specCaptcha.toBase64());
+
+
+		return R.ok(hashMap);
+	}
 
 	@GetMapping("{id}")
 	@Operation(summary = "查詢單一器捐同意書")
@@ -119,6 +145,15 @@ public class OrganDonationConsentController {
 	@Operation(summary = "線上填寫器捐同意書")
 	public R<InsertOrganDonationConsentDTO> saveOrganDonationConsent(
 			@Validated @RequestBody InsertOrganDonationConsentDTO insertOrganDonationConsentDTO) {
+
+		// 透過key 獲取redis中的驗證碼
+		String redisCode = redissonClient.<String>getBucket(insertOrganDonationConsentDTO.getVerificationKey()).get();
+		String userVerificationCode = insertOrganDonationConsentDTO.getVerificationCode();
+
+		// 判斷驗證碼是否正確,如果不正確就直接返回前端,不做後續的業務處理
+		if (userVerificationCode == null || !redisCode.equals(userVerificationCode.trim().toLowerCase())) {
+			return R.fail("驗證碼不正確");
+		}
 
 		organDonationConsentService.insertOrganDonationConsent(insertOrganDonationConsentDTO);
 		return R.ok();

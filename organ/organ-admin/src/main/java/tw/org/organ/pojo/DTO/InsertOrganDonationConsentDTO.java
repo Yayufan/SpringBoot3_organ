@@ -72,5 +72,13 @@ public class InsertOrganDonationConsentDTO {
 	@NotEmpty
 	@Schema(description = "要捐贈的器官列表")
 	private List<String> donateOrgans;
+	
+	@NotBlank
+	@Schema(description = "驗證碼key")
+	private String verificationKey;
+	
+	@NotBlank
+	@Schema(description = "用戶輸入的驗證碼")
+	private String verificationCode;
 
 }
