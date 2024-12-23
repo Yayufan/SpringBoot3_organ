@@ -31,6 +31,11 @@ public class UpdateOrganDonationConsentDTO {
 	@Schema(description = "生日")
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	private LocalDate birthday;
+	
+	@NotBlank
+    @Schema(description = "性別,1為男 2為女")
+    private String gender;
+
 
 	@NotBlank
 	@Size(max = 255, message = "連絡電話過長")

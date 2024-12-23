@@ -3,6 +3,7 @@ package tw.org.organ.pojo.DTO;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -29,6 +30,11 @@ public class InsertOrganDonationConsentDTO {
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	@Schema(description = "生日")
 	private LocalDate birthday;
+	
+    
+	@NotBlank
+    @Schema(description = "性別,1為男 2為女")
+    private String gender;
 
 	@NotBlank
 	@Size(max = 255, message = "連絡電話過長")

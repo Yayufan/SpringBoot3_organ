@@ -49,6 +49,10 @@ public class OrganDonationConsent implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd")
     @TableField("birthday")
     private LocalDate birthday;
+    
+    @Schema(description = "性別,1為男 2為女")
+    @TableField("gender")
+    private String gender;
 
     @Schema(description = "連絡電話")
     @TableField("contact_number")
