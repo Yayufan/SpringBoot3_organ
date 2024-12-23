@@ -21,6 +21,9 @@ public class OrganDonationConsentExcel {
 	@ExcelProperty("生日")
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthday;
+	
+	@ExcelProperty("性別")
+	private String gender;
 
 	@ExcelProperty("連絡電話")
     private String contactNumber;

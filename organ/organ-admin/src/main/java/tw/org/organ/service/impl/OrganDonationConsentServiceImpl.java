@@ -150,7 +150,7 @@ public class OrganDonationConsentServiceImpl extends ServiceImpl<OrganDonationCo
 			return organDonationConsentConvert.entityToExcel(organDonationConsent);
 		}).collect(Collectors.toList());
 
-		EasyExcel.write(response.getOutputStream(), OrganDonationConsentExcel.class).sheet("模板").doWrite(excelData);
+		EasyExcel.write(response.getOutputStream(), OrganDonationConsentExcel.class).sheet("清單").doWrite(excelData);
 
 	}
 
