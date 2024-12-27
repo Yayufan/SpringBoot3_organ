@@ -3,9 +3,11 @@ package tw.org.organ.controller;
 import java.util.List;
 
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,11 +19,17 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import cn.dev33.satoken.annotation.SaCheckLogin;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import tw.org.organ.pojo.DTO.InsertFileDTO;
-import tw.org.organ.pojo.entity.Article;
+import tw.org.organ.pojo.entity.File;
 import tw.org.organ.service.FileService;
 import tw.org.organ.utils.R;
 
@@ -44,21 +52,24 @@ public class FileController {
 
 	@GetMapping("{group}")
 	@Operation(summary = "查詢某個組別所有文章")
-	public R<List<Article>> getAllFileByGroup(@PathVariable("group") String group) {
+	public R<List<File>> getAllFileByGroup(@PathVariable("group") String group) {
 		return R.ok();
 	}
-	
+
 	@GetMapping("{group}/pagination")
 	@Operation(summary = "查詢某個組別所有檔案(分頁)")
-	public R<IPage<Article>> getAllFileByGroup(@PathVariable("group") String group, @RequestParam Integer page,
+	public R<IPage<File>> getAllFileByGroup(@PathVariable("group") String group, @RequestParam Integer page,
 			@RequestParam Integer size) {
-		Page<Article> pageInfo = new Page<>(page, size);
-		IPage<Article> articleList = fileService.getAllFileByGroup(group, pageInfo);
-		return R.ok(articleList);
+		Page<File> pageInfo = new Page<>(page, size);
+		IPage<File> fileList = fileService.getAllFileByGroup(group, pageInfo);
+		System.out.println("已對檔案中心進行查詢");
+		return R.ok(fileList);
 	}
-	
 
 	@PostMapping
+	@Parameters({
+			@Parameter(name = "Authorization", description = "請求頭token,token-value開頭必須為Bearer ", required = true, in = ParameterIn.HEADER) })
+	@SaCheckLogin
 	@Operation(summary = "新增檔案至某個類別")
 	public R<Void> addFile(@RequestParam("file") MultipartFile[] file, @RequestParam("data") String jsonData)
 			throws JsonMappingException, JsonProcessingException {
@@ -66,16 +77,29 @@ public class FileController {
 		ObjectMapper objectMapper = new ObjectMapper();
 		InsertFileDTO insertFileDTO = objectMapper.readValue(jsonData, InsertFileDTO.class);
 
-		//將檔案和資料對象傳給後端
+		// 將檔案和資料對象傳給後端
 		fileService.addFile(file, insertFileDTO);
-		
+
 		return R.ok();
 	}
 
-	@PostMapping("{id}")
+	@DeleteMapping("{id}")
+	@SaCheckLogin
+	@Parameters({
+			@Parameter(name = "Authorization", description = "請求頭token,token-value開頭必須為Bearer ", required = true, in = ParameterIn.HEADER) })
 	@Operation(summary = "根據ID來刪除檔案")
 	public R<Void> deleteFile(@PathVariable("id") Long fileId) {
-		System.out.println("檔案刪除");
+		fileService.deleteFile(fileId);
+		return R.ok();
+	}
+
+	@Operation(summary = "批量刪除文章")
+	@Parameters({
+			@Parameter(name = "Authorization", description = "請求頭token,token-value開頭必須為Bearer ", required = true, in = ParameterIn.HEADER) })
+	@SaCheckLogin
+	@DeleteMapping()
+	public R<Void> batchDeleteArticle(@Valid @NotNull @RequestBody List<Long> fileIdList) {
+		fileService.deleteFile(fileIdList);
 		return R.ok();
 	}
 

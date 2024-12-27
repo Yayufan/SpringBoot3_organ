@@ -1,5 +1,7 @@
 package tw.org.organ.service;
 
+import java.util.List;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -19,9 +21,12 @@ import tw.org.organ.pojo.entity.File;
  */
 public interface FileService extends IService<File> {
 
-	IPage<File> getAllFileByGroup(String group,Page<File> pageInfo);
-	
-	void addFile( MultipartFile[] file,InsertFileDTO insertFileDTO);
-	
-	void deleteFile (Long fileId);
+	IPage<File> getAllFileByGroup(String group, Page<File> pageInfo);
+
+	void addFile(MultipartFile[] file, InsertFileDTO insertFileDTO);
+
+	void deleteFile(Long fileId);
+
+	void deleteFile(List<Long> fileIdList);
+
 }

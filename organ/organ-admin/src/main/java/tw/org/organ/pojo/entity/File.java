@@ -1,5 +1,8 @@
 package tw.org.organ.pojo.entity;
 
+import java.io.Serializable;
+import java.time.LocalDateTime;
+
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -7,10 +10,7 @@ import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import java.io.Serializable;
-import java.time.LocalDateTime;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -64,7 +64,7 @@ public class File implements Serializable {
 	private LocalDateTime createTime;
 
 	@Schema(description = "創建者")
-	@TableField("create_by")
+	@TableField(value = "create_by", fill = FieldFill.INSERT)
 	private String createBy;
 
 	@Schema(description = "最後更新時間")
@@ -73,7 +73,7 @@ public class File implements Serializable {
 	private LocalDateTime updateTime;
 
 	@Schema(description = "最後更新者")
-	@TableField("update_by")
+	@TableField(value = "update_by", fill = FieldFill.UPDATE)
 	private String updateBy;
 
 	@Schema(description = "邏輯刪除(0為存在,1為刪除)")
