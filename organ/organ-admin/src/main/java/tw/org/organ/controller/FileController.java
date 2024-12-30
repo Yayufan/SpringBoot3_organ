@@ -49,11 +49,19 @@ import tw.org.organ.utils.R;
 public class FileController {
 
 	private final FileService fileService;
-
+	
 	@GetMapping("{group}")
-	@Operation(summary = "查詢某個組別所有文章")
+	@Operation(summary = "查詢某個組別所有檔案")
 	public R<List<File>> getAllFileByGroup(@PathVariable("group") String group) {
-		return R.ok();
+		List<File> fileList = fileService.getAllFileByGroup(group);
+		return R.ok(fileList);
+	}
+
+	@GetMapping("{group}/{type}")
+	@Operation(summary = "查詢某個組別及類別的所有文章")
+	public R<List<File>> getAllFileByGroupAndType(@PathVariable("group") String group,@PathVariable("type") String type) {
+		List<File> fileList = fileService.getAllFileByGroupAndType(group, type);
+		return R.ok(fileList);
 	}
 
 	@GetMapping("{group}/pagination")

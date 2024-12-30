@@ -21,6 +21,10 @@ import tw.org.organ.pojo.entity.File;
  */
 public interface FileService extends IService<File> {
 
+	List<File> getAllFileByGroup(String group);
+	
+	List<File> getAllFileByGroupAndType(String group,String type);
+	
 	IPage<File> getAllFileByGroup(String group, Page<File> pageInfo);
 
 	void addFile(MultipartFile[] file, InsertFileDTO insertFileDTO);

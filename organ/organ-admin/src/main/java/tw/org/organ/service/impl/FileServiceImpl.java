@@ -37,14 +37,38 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
 	private String minioBucketName;
 
 	private final MinioUtil minioUtil;
+	
+	@Override
+	public List<File> getAllFileByGroup(String group) {
+		// TODO Auto-generated method stub
+		LambdaQueryWrapper<File> fileQueryWrapper = new LambdaQueryWrapper<>();
+		fileQueryWrapper.eq(File::getGroupType, group).orderByAsc(File::getSort)
+				.orderByDesc(File::getFileId);
+		List<File> fileList = baseMapper.selectList(fileQueryWrapper);
+		
+		return fileList;
+	}
+
+	@Override
+	public List<File> getAllFileByGroupAndType(String group, String type) {
+		// TODO Auto-generated method stub
+		LambdaQueryWrapper<File> fileQueryWrapper = new LambdaQueryWrapper<>();
+		fileQueryWrapper.eq(File::getGroupType, group).eq(File::getType,type).orderByAsc(File::getSort)
+				.orderByDesc(File::getFileId);
+		
+		List<File> fileList = baseMapper.selectList(fileQueryWrapper);
+		
+		return fileList;
+	}
+	
 
 	@Override
 	public IPage<File> getAllFileByGroup(String group, Page<File> pageInfo) {
 		// 查詢群組、分頁，並倒序排列
-		LambdaQueryWrapper<File> articleQueryWrapper = new LambdaQueryWrapper<>();
-		articleQueryWrapper.eq(File::getGroupType, group).orderByAsc(File::getType).orderByAsc(File::getSort)
-				.orderByDesc(File::getFileId).orderByDesc(File::getFileId);
-		Page<File> fileList = baseMapper.selectPage(pageInfo, articleQueryWrapper);
+		LambdaQueryWrapper<File> fileQueryWrapper = new LambdaQueryWrapper<>();
+		fileQueryWrapper.eq(File::getGroupType, group).orderByAsc(File::getType).orderByAsc(File::getSort)
+				.orderByDesc(File::getFileId);
+		Page<File> fileList = baseMapper.selectPage(pageInfo, fileQueryWrapper);
 		return fileList;
 	}
 
@@ -98,5 +122,9 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
 		}
 
 	}
+
+
+
+
 
 }
