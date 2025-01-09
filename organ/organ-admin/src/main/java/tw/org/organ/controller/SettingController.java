@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import tw.org.organ.mapper.SettingMapper;
 import tw.org.organ.pojo.DTO.UpdateSettingDTO;
 import tw.org.organ.pojo.entity.Setting;
 import tw.org.organ.service.SettingService;
@@ -37,6 +38,7 @@ import tw.org.organ.utils.R;
 public class SettingController {
 
 	private final SettingService settingService;
+	private final SettingMapper settingMapper;
 	
 	@GetMapping
 	@Parameters({
@@ -57,6 +59,20 @@ public class SettingController {
 		settingService.updateSetting(updateSettingDTOList);
 		return R.ok();
 
+	}
+	
+	
+	@GetMapping("add-view-count")
+	@Operation(summary = "訪問時，瀏覽數+1")
+	public R<Void> addViewCount() {
+		Setting viewCountSetting = settingMapper.selectById(5L);
+		Integer viewCount = viewCountSetting.getViewCount();
+		
+		// 瀏覽數加1
+	    viewCountSetting.setViewCount(viewCount + 1);
+		
+		settingMapper.updateById(viewCountSetting);
+		return R.ok();
 	}
 	
 }

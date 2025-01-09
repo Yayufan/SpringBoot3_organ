@@ -45,6 +45,10 @@ public class Setting implements Serializable {
 	@Schema(description = "功能設定啟用狀態,0為禁用,1為啟用")
 	@TableField("status")
 	private String status;
+	
+	@Schema(description = "網站瀏覽人次計數")
+	@TableField("view_count")
+	private Integer viewCount;
 
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@Schema(description = "創建時間")
