@@ -62,6 +62,13 @@ public class SettingController {
 	}
 	
 	
+	@GetMapping("get-view-count")
+	@Operation(summary = "獲取網站瀏覽人次")
+	public R<Setting> getViewCount() {
+		Setting viewCountSetting = settingMapper.selectById(5L);
+		return R.ok(viewCountSetting);
+	}
+	
 	@GetMapping("add-view-count")
 	@Operation(summary = "訪問時，瀏覽數+1")
 	public R<Void> addViewCount() {
