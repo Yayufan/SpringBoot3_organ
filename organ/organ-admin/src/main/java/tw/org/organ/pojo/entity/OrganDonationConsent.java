@@ -65,6 +65,10 @@ public class OrganDonationConsent implements Serializable {
     @Schema(description = "E-Mail")
     @TableField("email")
     private String email;
+    
+    @Schema(description = "這邊當作國籍使用，只有 本國籍 和 外國籍")
+    @TableField("country")
+    private String country;
 
     @Schema(description = "聯絡地址")
     @TableField("address")

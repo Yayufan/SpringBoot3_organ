@@ -3,6 +3,7 @@ package tw.org.organ.pojo.DTO;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -48,6 +49,10 @@ public class InsertOrganDonationConsentDTO {
 	@Size(max = 255, message = "E-Mail過長")
 	@Schema(description = "E-Mail")
 	private String email;
+	
+	@NotBlank
+    @Schema(description = "這邊當作國籍使用，只有 本國籍 和 外國籍")
+    private String country;
 
 	@NotBlank
 	@Size(max = 255, message = "聯絡地址過長")
