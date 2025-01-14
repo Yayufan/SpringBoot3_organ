@@ -61,11 +61,11 @@ public class Setting implements Serializable {
 
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@Schema(description = "最後更新時間")
-	@TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
+	@TableField(value = "update_time", fill = FieldFill.UPDATE)
 	private LocalDateTime updateTime;
 
 	@Schema(description = "最後更新者")
-	@TableField(value = "update_by", fill = FieldFill.INSERT_UPDATE)
+	@TableField(value = "update_by", fill = FieldFill.UPDATE)
 	private String updateBy;
 
 	@Schema(description = "邏輯刪除(0為存在,1為刪除)")

@@ -6,6 +6,8 @@ import java.time.LocalDateTime;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 
@@ -15,6 +17,9 @@ public class OrganDonationConsentExcel {
 	@ExcelProperty("簽署者姓名")
     private String name;
 
+	@ExcelProperty("國籍")
+    private String country;
+	
 	@ExcelProperty("身分證字號")
     private String idCard;
 
@@ -33,6 +38,8 @@ public class OrganDonationConsentExcel {
 
 	@ExcelProperty("E-Mail")
     private String email;
+	
+
 
 	@ExcelProperty("聯絡地址")
     private String address;
