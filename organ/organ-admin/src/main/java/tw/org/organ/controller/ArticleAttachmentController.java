@@ -9,12 +9,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,12 +21,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import tw.org.organ.pojo.DTO.InsertArticleAttachmentDTO;
-import tw.org.organ.pojo.DTO.InsertArticleDTO;
-import tw.org.organ.pojo.DTO.InsertFileDTO;
-import tw.org.organ.pojo.entity.Article;
 import tw.org.organ.pojo.entity.ArticleAttachment;
 import tw.org.organ.service.ArticleAttachmentService;
 import tw.org.organ.utils.R;
@@ -61,7 +56,8 @@ public class ArticleAttachmentController {
 
 	@PostMapping
 	@Parameters({
-			@Parameter(name = "Authorization", description = "請求頭token,token-value開頭必須為Bearer ", required = true, in = ParameterIn.HEADER) })
+			@Parameter(name = "Authorization", description = "請求頭token,token-value開頭必須為Bearer ", required = true, in = ParameterIn.HEADER),
+			@Parameter(name = "data", description = "JSON 格式的附件資料", required = true, in = ParameterIn.QUERY, schema = @Schema(implementation = InsertArticleAttachmentDTO.class)) })
 	@SaCheckLogin
 	@Operation(summary = "為某個文章新增附件")
 	public R<Void> addArticleAttachment(@RequestParam("file") MultipartFile[] files,
@@ -81,7 +77,7 @@ public class ArticleAttachmentController {
 	@SaCheckLogin
 	@Parameters({
 			@Parameter(name = "Authorization", description = "請求頭token,token-value開頭必須為Bearer ", required = true, in = ParameterIn.HEADER) })
-	@Operation(summary = "根據ID來刪除文章附件")
+	@Operation(summary = "根據 articleAttachment ID來刪除文章附件")
 	public R<Void> deleteFile(@PathVariable("id") Long articleAttachmentId) {
 		articleAttachmentService.deleteArticleAttachment(articleAttachmentId);
 		return R.ok();

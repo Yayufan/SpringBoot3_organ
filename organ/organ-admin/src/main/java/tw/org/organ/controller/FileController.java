@@ -24,10 +24,12 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import tw.org.organ.pojo.DTO.InsertArticleAttachmentDTO;
 import tw.org.organ.pojo.DTO.InsertFileDTO;
 import tw.org.organ.pojo.entity.File;
 import tw.org.organ.service.FileService;
@@ -76,7 +78,8 @@ public class FileController {
 
 	@PostMapping
 	@Parameters({
-			@Parameter(name = "Authorization", description = "請求頭token,token-value開頭必須為Bearer ", required = true, in = ParameterIn.HEADER) })
+			@Parameter(name = "Authorization", description = "請求頭token,token-value開頭必須為Bearer ", required = true, in = ParameterIn.HEADER),
+			@Parameter(name = "data", description = "JSON 格式的檔案資料", required = true, in = ParameterIn.QUERY, schema = @Schema(implementation = InsertFileDTO.class))})
 	@SaCheckLogin
 	@Operation(summary = "新增檔案至某個類別")
 	public R<Void> addFile(@RequestParam("file") MultipartFile[] file, @RequestParam("data") String jsonData)
