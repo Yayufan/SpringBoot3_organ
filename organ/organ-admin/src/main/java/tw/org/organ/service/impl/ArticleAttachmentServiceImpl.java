@@ -6,6 +6,7 @@ import tw.org.organ.pojo.entity.ArticleAttachment;
 import tw.org.organ.convert.ArticleAttachmentConvert;
 import tw.org.organ.mapper.ArticleAttachmentMapper;
 import tw.org.organ.service.ArticleAttachmentService;
+import tw.org.organ.utils.MinioUtil;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -16,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,6 +36,11 @@ public class ArticleAttachmentServiceImpl extends ServiceImpl<ArticleAttachmentM
 
 	private final ArticleAttachmentMapper articleAttachmentMapper;
 	private final ArticleAttachmentConvert articleAttachmentConvert;
+	private final MinioUtil minioUtil;
+	private final String PATH = "articleAttachment";
+	
+	@Value("${minio.bucketName}")
+	private String minioBucketName;
 
 	@Override
 	public List<ArticleAttachment> getAllArticleAttachmentByArticleId(Long articleId) {
@@ -55,11 +62,23 @@ public class ArticleAttachmentServiceImpl extends ServiceImpl<ArticleAttachmentM
 		// 轉換檔案
 		ArticleAttachment articleAttachment = articleAttachmentConvert.insertDTOToEntity(insertArticleAttachmentDTO);
 
-		// 確認並上傳檔案
+		// 檔案存在，處理檔案
+		if (files != null && files.length > 0) {
 
-		// 配置Path
+			List<String> upload = minioUtil.upload(minioBucketName, PATH + "/", files);
+			// 基本上只有有一個檔案跟著formData上傳,所以這邊直接寫死,把唯一的url增添進對象中
+			String url = upload.get(0);
+			// 將bucketName 組裝進url
+			url = "/" + minioBucketName + "/" + url;
+			// minio完整路徑放路對象中
+			articleAttachment.setPath(url);
 
-		// 儲存進資料庫
+			// 放入資料庫
+			baseMapper.insert(articleAttachment);
+
+		}
+
+		System.out.println("上傳完成");
 
 	}
 
@@ -69,11 +88,12 @@ public class ArticleAttachmentServiceImpl extends ServiceImpl<ArticleAttachmentM
 		ArticleAttachment articleAttachment = articleAttachmentMapper.selectById(articleAttachmentId);
 
 		String filePath = articleAttachment.getPath();
+		String result = filePath.substring(filePath.indexOf("/", 1));
 
-		// 刪除檔案
-
-		// 刪除資料
-		articleAttachmentMapper.deleteById(articleAttachment);
+		// 透過Minio進行刪除
+		minioUtil.removeObject(minioBucketName, result);
+		// 資料庫資料刪除
+		baseMapper.deleteById(articleAttachmentId);
 
 	}
 
