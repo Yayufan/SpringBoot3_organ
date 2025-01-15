@@ -44,7 +44,9 @@ public class ArticleAttachmentServiceImpl extends ServiceImpl<ArticleAttachmentM
 
 	@Override
 	public List<ArticleAttachment> getAllArticleAttachmentByArticleId(Long articleId) {
-		List<ArticleAttachment> articleAttachmentList = articleAttachmentMapper.selectList(null);
+		LambdaQueryWrapper<ArticleAttachment> articleAttachmentQueryWrapper = new LambdaQueryWrapper<>();
+		articleAttachmentQueryWrapper.eq(ArticleAttachment::getArticleId,articleId);
+		List<ArticleAttachment> articleAttachmentList = articleAttachmentMapper.selectList(articleAttachmentQueryWrapper);
 		return articleAttachmentList;
 	}
 
