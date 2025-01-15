@@ -14,9 +14,11 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.exception.SaTokenException;
 import jakarta.validation.ConstraintViolationException;
+import lombok.extern.slf4j.Slf4j;
 import tw.org.organ.utils.R;
 
 @ControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
 
 	// 全局異常處理,當這個異常沒有被特別處理時,一定會走到全局異常,因為Exception範圍最大
@@ -34,6 +36,7 @@ public class GlobalExceptionHandler {
 	public R<Map<String, Object>> maxUploadSizeExceptionHandler(MaxUploadSizeExceededException exception) {
 
 		String message = exception.getMessage();
+		log.error("檔案大小超過異常捕獲: ", exception);
 		return R.fail(500, message);
 	}
 
@@ -45,6 +48,9 @@ public class GlobalExceptionHandler {
 	public R<Map<String, Object>> jsonFormatExceptionHandler(HttpMessageNotReadableException exception) {
 
 		Throwable cause = exception.getCause();
+		
+		log.error("日期Json轉換異常捕獲: ", exception);
+		
 		String message;
 
 		if (cause instanceof InvalidFormatException) {
@@ -57,21 +63,26 @@ public class GlobalExceptionHandler {
 	}
 
 	/**
-	 * 参数校验异常MethodArgumentNotValidException
+	 * 參數校驗異常MethodArgumentNotValidException
+	 * 適用於對 對象 或 複雜類型 的參數進行校驗，比如對 DTO 或 POJO 對象的字段进行校驗
 	 */
 	@ResponseBody
 	@ExceptionHandler(value = MethodArgumentNotValidException.class)
 	public R<Map<String, Object>> argumentExceptionHandler(MethodArgumentNotValidException exception) {
+		log.error("參數校驗異常捕獲: ", exception);
 		String message = exception.getBindingResult().getFieldError().getDefaultMessage();
 		return R.fail(500, "參數校驗異常，" + message);
 	}
 
 	/**
 	 * 參數校驗異常ConstraintViolationException
+	 * 適用於對 方法參數 進行校驗，比如對單個參數或簡單類型的參數進行校驗
+	 * 
 	 */
 	@ResponseBody
 	@ExceptionHandler(value = ConstraintViolationException.class)
 	public R<Map<String, Object>> argumentValidExceptionHandler(ConstraintViolationException exception) {
+		log.error("參數校驗異常捕獲: ", exception);
 		String message = exception.getLocalizedMessage();
 		return R.fail(500, "參數校驗異常，" + message);
 	}
@@ -83,6 +94,8 @@ public class GlobalExceptionHandler {
 	@ResponseBody
 	public R<Map<String, Object>> handlerNotLoginException(NotLoginException nle) throws Exception {
 
+		log.error("token校驗異常捕獲: ", nle);
+		
 		// 打印堆栈，以供调试
 		nle.printStackTrace();
 
@@ -116,6 +129,8 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(SaTokenException.class)
 	@ResponseBody
 	public R<Map<String, Object>> error(SaTokenException e) {
+		
+		log.error("saToken異常捕獲: ", e);
 		e.printStackTrace();
 		// 根据不同异常细分状态码返回不同的提示
 		// 前端沒回傳token的時候
@@ -142,6 +157,7 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(ArithmeticException.class)
 	@ResponseBody
 	public R<Map<String, Object>> error(ArithmeticException e) {
+		log.error("數值計算異常捕獲,數字有0值參與計算: ", e);
 		e.printStackTrace();
 		return R.fail("計算異常");
 	}
@@ -152,6 +168,7 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(Exception.class)
 	@ResponseBody
 	public R<Map<String, Object>> error(Exception e) {
+		log.error("全局異常捕獲: ", e);
 		e.printStackTrace();
 		return R.fail("功能異常，請稍後重試...");
 	}

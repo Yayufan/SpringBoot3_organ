@@ -87,7 +87,7 @@ public interface OrganDonationConsentConvert {
 					{ "all", "全部捐贈" },
 					{ "lung", "肺臟" },
 					{ "pancreas", "胰臟" },
-					{ "smallIntestine", "小腸" }, 
+					{ "smallIntestine", "腸" }, 
 					{ "skin", "皮膚" },
 					{ "heartValve", "心瓣膜" },
 					{ "heart", "心臟" },
