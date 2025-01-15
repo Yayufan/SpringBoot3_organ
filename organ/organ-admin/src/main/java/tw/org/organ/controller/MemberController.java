@@ -170,7 +170,7 @@ public class MemberController {
 	@Operation(summary = "會員註冊-信箱密碼")
 	@PostMapping("register")
 	public R<Void> register(@Validate @RequestBody InsertMemberDTO insertMemberDTO) {
-		Long insertMember = memberService.insertMember(insertMemberDTO);
+		memberService.insertMember(insertMemberDTO);
 		return R.ok();
 	}
 

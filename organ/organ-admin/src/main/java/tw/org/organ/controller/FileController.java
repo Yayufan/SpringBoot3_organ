@@ -29,7 +29,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import tw.org.organ.pojo.DTO.InsertArticleAttachmentDTO;
 import tw.org.organ.pojo.DTO.InsertFileDTO;
 import tw.org.organ.pojo.entity.File;
 import tw.org.organ.service.FileService;

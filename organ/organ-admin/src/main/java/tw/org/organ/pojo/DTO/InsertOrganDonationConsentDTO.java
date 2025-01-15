@@ -3,7 +3,6 @@ package tw.org.organ.pojo.DTO;
 import java.time.LocalDate;
 import java.util.List;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import io.swagger.v3.oas.annotations.media.Schema;

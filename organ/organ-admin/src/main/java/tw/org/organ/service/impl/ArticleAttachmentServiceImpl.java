@@ -1,12 +1,10 @@
 package tw.org.organ.service.impl;
 
-import tw.org.organ.pojo.DTO.InsertArticleAttachmentDTO;
-import tw.org.organ.pojo.entity.Article;
-import tw.org.organ.pojo.entity.ArticleAttachment;
-import tw.org.organ.convert.ArticleAttachmentConvert;
-import tw.org.organ.mapper.ArticleAttachmentMapper;
-import tw.org.organ.service.ArticleAttachmentService;
-import tw.org.organ.utils.MinioUtil;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -14,12 +12,12 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 import lombok.RequiredArgsConstructor;
-
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
+import tw.org.organ.convert.ArticleAttachmentConvert;
+import tw.org.organ.mapper.ArticleAttachmentMapper;
+import tw.org.organ.pojo.DTO.InsertArticleAttachmentDTO;
+import tw.org.organ.pojo.entity.ArticleAttachment;
+import tw.org.organ.service.ArticleAttachmentService;
+import tw.org.organ.utils.MinioUtil;
 
 /**
  * <p>
