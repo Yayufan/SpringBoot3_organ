@@ -267,72 +267,6 @@ public class OrganDonationConsentServiceImpl extends ServiceImpl<OrganDonationCo
 				}
 			}
 
-			// 3、替換資料，處理正文開始
-//			for (XWPFParagraph paragraph : word.getParagraphs()) {
-//				List<XWPFRun> runs = paragraph.getRuns();
-//				StringBuilder placeholderBuilder = new StringBuilder(); // 用於構建佔位符
-//				boolean isPlaceholder = false; // 是否正在檢測佔位符
-//				int placeholderStartIndex = -1; // 佔位符開始的 run 索引
-//				int placeholderEndIndex = -1; // 佔位符結束的 run 索引
-//
-//				for (int i = 0; i < runs.size(); i++) {
-//					XWPFRun run = runs.get(i);
-//					String text = run.getText(0);
-//					if (text != null) {
-//						System.out.println("當前text: " + text);
-//						if (text.contains("$") || text.contains("{")) {
-//							// 檢測到佔位符的開始
-//							isPlaceholder = true;
-//							placeholderStartIndex = i;
-//							placeholderBuilder.setLength(0); // 清空佔位符構建器
-//						}
-//
-//						if (isPlaceholder) {
-//							placeholderBuilder.append(text); // 構建佔位符
-//						}
-//
-//						if (text.contains("}")) {
-//							// 檢測到佔位符的結束
-//							isPlaceholder = false;
-//							placeholderEndIndex = i;
-//
-//							// 獲取完整的佔位符
-//							String placeholder = placeholderBuilder.toString();
-//							if (params.containsKey(placeholder)) {
-//								// 替換佔位符
-//								String replacement = params.get(placeholder);
-//
-//								// 清空佔位符部分的 runs
-//								for (int j = placeholderStartIndex; j <= placeholderEndIndex; j++) {
-//									runs.get(j).setText("", 0);
-//								}
-//
-//								// 將替換後的文本設置到第一個 run
-//								runs.get(placeholderStartIndex).setText(replacement, 0);
-//							}
-//						}
-//					}
-//				}
-//			}
-
-//			List<XWPFParagraph> paragraphs = word.getParagraphs();
-//			for (XWPFParagraph paragraph : paragraphs) {
-//				List<XWPFRun> runs = paragraph.getRuns();
-//				for (XWPFRun run : runs) {
-//					String text = run.getText(0);
-//					System.out.println("當前text為 " + text);
-//					if (text != null) {
-//						for (String key : params.keySet()) {
-////							System.out.println("當前key為 " + key);
-//							if (text.contains(key)) {
-////								System.out.println("text匹配到key "+key);
-//								run.setText(text.replaceAll(key, params.get(key)), 0);
-//							}
-//						}
-//					}
-//				}
-//			}
-
 			// 4、匯出word
 			String fileName = URLEncoder.encode(organDonationConsent.getName() + "_簽卡.docx", "UTF-8").replaceAll("\\+",
 					"%20");
@@ -341,6 +275,8 @@ public class OrganDonationConsentServiceImpl extends ServiceImpl<OrganDonationCo
 					"attachment;filename=" + new String(fileName.getBytes(), "ISO8859-1"));
 			response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 			word.write(response.getOutputStream());
+			
+			
 		} catch (Exception e) {
 			System.out.println("發生錯誤 " + e);
 		}
