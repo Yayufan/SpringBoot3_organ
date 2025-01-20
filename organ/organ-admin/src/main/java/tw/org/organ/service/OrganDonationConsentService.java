@@ -114,4 +114,13 @@ public interface OrganDonationConsentService extends IService<OrganDonationConse
 	 * @throws IOException 
 	 */
 	void downloadExcel(HttpServletResponse response) throws IOException;
+	
+	/**
+	 * 下載同意書的Word
+	 * 
+	 * @param response
+	 * @throws IOException
+	 */
+	void downloadWord(Long organDonationConsentId,HttpServletResponse response) throws IOException;
+	
 }

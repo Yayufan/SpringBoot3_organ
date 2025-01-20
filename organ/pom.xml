@@ -35,6 +35,7 @@
         <jsoup>1.18.1</jsoup>
         <guava>33.2.1-jre</guava>
         <easyExcel>4.0.0</easyExcel>
+        <apachePOI>5.3.0</apachePOI>
         <commons-io-for-easyExcel>2.17.0</commons-io-for-easyExcel>
         <easy-captcha>1.6.2</easy-captcha>
 
@@ -172,6 +173,21 @@
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-compress</artifactId>
                 <version>1.27.1</version>
+            </dependency>
+
+            <!-- Apache POI 用於處理複雜Excel和Word -->
+            <!-- https://mvnrepository.com/artifact/org.apache.poi/poi -->
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi</artifactId>
+                <version>${apachePOI}</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml</artifactId>
+                <version>${apachePOI}</version>
             </dependency>
 
             <!-- QRcode 產出 zxing 核心模塊 -->

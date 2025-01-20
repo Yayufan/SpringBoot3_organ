@@ -73,7 +73,6 @@ public class OrganDonationConsentController {
 		hashMap.put("key", key);
 		hashMap.put("image", specCaptcha.toBase64());
 
-
 		return R.ok(hashMap);
 	}
 
@@ -208,6 +207,16 @@ public class OrganDonationConsentController {
 	@GetMapping("/download-excel")
 	public void downloadExcel(HttpServletResponse response) throws IOException {
 		organDonationConsentService.downloadExcel(response);
+	}
+
+	@Operation(summary = "下載同意書Word")
+	@SaCheckLogin
+	@Parameters({
+			@Parameter(name = "Authorization", description = "請求頭token,token-value開頭必須為Bearer ", required = true, in = ParameterIn.HEADER) })
+	@GetMapping("/download-word/{id}")
+	public void downloadPersonalWord(@PathVariable("id") Long organDonationConsentId, HttpServletResponse response)
+			throws IOException {
+		organDonationConsentService.downloadWord(organDonationConsentId, response);
 	}
 
 }
