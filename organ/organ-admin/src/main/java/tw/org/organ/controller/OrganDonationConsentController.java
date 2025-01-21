@@ -1,6 +1,7 @@
 package tw.org.organ.controller;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -109,7 +110,9 @@ public class OrganDonationConsentController {
 	@Operation(summary = "根據器捐同意書狀態,查詢符合的所有器捐同意書(分頁)")
 	public R<IPage<OrganDonationConsent>> getAllOrganDonationConsentByQuery(@RequestParam Integer page,
 			@RequestParam Integer size, @RequestParam(required = false) String status,
-			@RequestParam(required = false) String queryText) {
+			@RequestParam(required = false) String queryText,
+			@RequestParam(required = false) LocalDate startDate,
+			@RequestParam(required = false) LocalDate endDate) {
 		Page<OrganDonationConsent> pageInfo = new Page<>(page, size);
 
 		IPage<OrganDonationConsent> organDonationConsentList;
