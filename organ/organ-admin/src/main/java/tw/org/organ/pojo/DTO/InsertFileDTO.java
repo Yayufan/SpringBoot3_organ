@@ -1,7 +1,5 @@
 package tw.org.organ.pojo.DTO;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
