@@ -1,6 +1,7 @@
 package tw.org.organ.service;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -44,16 +45,20 @@ public interface OrganDonationConsentService extends IService<OrganDonationConse
 	 * @return
 	 */
 	IPage<OrganDonationConsent> getAllOrganDonationConsent(Page<OrganDonationConsent> page);
+	
 
 	/**
 	 * 獲取符合查詢條件的全部同意書(分頁)
 	 * 
 	 * @param page
 	 * @param status
+	 * @param queryText
+	 * @param startDate
+	 * @param endDate
 	 * @return
 	 */
 	IPage<OrganDonationConsent> getAllOrganDonationConsentByStatus(Page<OrganDonationConsent> page, String status,
-			String queryText);
+			String queryText,LocalDate startDate,LocalDate endDate);
 
 	/**
 	 * 獲取全部同意書的總數
@@ -113,7 +118,7 @@ public interface OrganDonationConsentService extends IService<OrganDonationConse
 	 * @param response
 	 * @throws IOException 
 	 */
-	void downloadExcel(HttpServletResponse response) throws IOException;
+	void downloadExcel(String startDate,String endDate,HttpServletResponse response) throws IOException;
 	
 	/**
 	 * 下載同意書的Word

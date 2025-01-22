@@ -2,4 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="tw.org.organ.mapper.OrganDonationConsentMapper">
 
+    <select id="selectOrganDonationConsentsByDate" resultType="OrganDonationConsent">
+        SELECT * FROM organ_donation_consent
+        WHERE signature_date BETWEEN #{startDate} AND #{endDate}
+    </select>
+
 </mapper>

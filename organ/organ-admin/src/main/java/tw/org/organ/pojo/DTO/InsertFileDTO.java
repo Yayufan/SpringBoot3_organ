@@ -1,5 +1,7 @@
 package tw.org.organ.pojo.DTO;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -25,6 +27,9 @@ public class InsertFileDTO {
     @Schema(description = "排序值")
     @NotNull
     private Integer sort;
+    
+	@Schema(description = "外部連結")
+	private String link;
 
 	
 }

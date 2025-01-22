@@ -107,6 +107,8 @@ public class OrganDonationConsentController {
 
 	@GetMapping("pagination-by-status")
 	@SaCheckLogin
+	@Parameters({
+		@Parameter(name = "Authorization", description = "請求頭token,token-value開頭必須為Bearer ", required = true, in = ParameterIn.HEADER) })
 	@Operation(summary = "根據器捐同意書狀態,查詢符合的所有器捐同意書(分頁)")
 	public R<IPage<OrganDonationConsent>> getAllOrganDonationConsentByQuery(@RequestParam Integer page,
 			@RequestParam Integer size, @RequestParam(required = false) String status,
@@ -118,7 +120,7 @@ public class OrganDonationConsentController {
 		IPage<OrganDonationConsent> organDonationConsentList;
 
 		organDonationConsentList = organDonationConsentService.getAllOrganDonationConsentByStatus(pageInfo, status,
-				queryText);
+				queryText,startDate,endDate);
 
 		return R.ok(organDonationConsentList);
 	}
@@ -207,9 +209,11 @@ public class OrganDonationConsentController {
 
 	@Operation(summary = "下載同意書excel列表")
 	@SaCheckLogin
+	@Parameters({
+		@Parameter(name = "Authorization", description = "請求頭token,token-value開頭必須為Bearer ", required = true, in = ParameterIn.HEADER) })
 	@GetMapping("/download-excel")
-	public void downloadExcel(HttpServletResponse response) throws IOException {
-		organDonationConsentService.downloadExcel(response);
+	public void downloadExcel(String startDate,String endDate ,HttpServletResponse response) throws IOException {
+		organDonationConsentService.downloadExcel(startDate,endDate,response);
 	}
 
 	@Operation(summary = "下載同意書Word")

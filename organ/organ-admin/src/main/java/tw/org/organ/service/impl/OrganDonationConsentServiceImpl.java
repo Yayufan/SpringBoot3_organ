@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -75,18 +74,22 @@ public class OrganDonationConsentServiceImpl extends ServiceImpl<OrganDonationCo
 
 	@Override
 	public IPage<OrganDonationConsent> getAllOrganDonationConsentByStatus(Page<OrganDonationConsent> page,
-			String status, String queryText) {
+			String status, String queryText,LocalDate startDate,LocalDate endDate) {
 
 		LambdaQueryWrapper<OrganDonationConsent> organDonationConsentQueryWrapper = new LambdaQueryWrapper<>();
 
+		
+		
 		// 如果 status 不為空字串、空格字串、Null 時才加入篩選條件
-		organDonationConsentQueryWrapper.eq(StringUtils.isNotBlank(status), OrganDonationConsent::getStatus, status)
+		organDonationConsentQueryWrapper.eq(
+				StringUtils.isNotBlank(status), OrganDonationConsent::getStatus, status)
 				// 當 queryText 不為空字串、空格字串、Null 時才加入篩選條件
 				.and(StringUtils.isNotBlank(queryText),
 						wrapper -> wrapper.like(OrganDonationConsent::getName, queryText).or()
 								.like(OrganDonationConsent::getIdCard, queryText).or()
 								.like(OrganDonationConsent::getContactNumber, queryText).or()
 								.like(OrganDonationConsent::getPhoneNumber, queryText))
+				.between((startDate != null && endDate != null), OrganDonationConsent::getSignatureDate,startDate , endDate)
 				.orderByDesc(OrganDonationConsent::getOrganDonationConsentId);
 
 		Page<OrganDonationConsent> organDonationConsentList = baseMapper.selectPage(page,
@@ -147,22 +150,53 @@ public class OrganDonationConsentServiceImpl extends ServiceImpl<OrganDonationCo
 	}
 
 	@Override
-	public void downloadExcel(HttpServletResponse response) throws IOException {
+	public void downloadExcel(String startDate,String endDate,HttpServletResponse response) throws IOException {
 
 		response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 		response.setCharacterEncoding("utf-8");
 		// 这里URLEncoder.encode可以防止中文乱码 ， 和easyexcel没有关系
 		String fileName = URLEncoder.encode("測試", "UTF-8").replaceAll("\\+", "%20");
 		response.setHeader("Content-disposition", "attachment;filename*=" + fileName + ".xlsx");
+		
 
-		List<OrganDonationConsent> allOrganDonationConsent = this.getAllOrganDonationConsent();
-		List<OrganDonationConsentExcel> excelData = allOrganDonationConsent.stream().map(organDonationConsent -> {
+		  // 测量第一部分执行时间
+//        long startTime1 = System.nanoTime();
+          // 第一部分代码
+		
+        List<OrganDonationConsent> organDonationConsentList = baseMapper.selectOrganDonationConsentsByDate(startDate,endDate);
+		
+//		long endTime1 = System.nanoTime();
+		
+//		System.out.println("第一部分执行时间: " + (endTime1 - startTime1) / 1_000_000_000.0 + " 秒");
+		
+		System.out.println("--------接下來轉換數據------------");
+		
+		
+        // 测量第二部分执行时间
+//        long startTime2 = System.nanoTime();
+        
+		List<OrganDonationConsentExcel> excelData = organDonationConsentList.stream().map(organDonationConsent -> {
 			return organDonationConsentConvert.entityToExcel(organDonationConsent);
 		}).collect(Collectors.toList());
+		
+//		long endTime2 = System.nanoTime();
+		
+//        System.out.println("第二部分执行时间: " + (endTime2 - startTime2) / 1_000_000_000.0 + " 秒");
 
-		EasyExcel.write(response.getOutputStream(), OrganDonationConsentExcel.class).sheet("清單").doWrite(excelData);
+		
+		System.out.println("接下來寫入數據");
+		
+		 // 测量第三部分执行时间
+//        long startTime3 = System.nanoTime();
 
+		EasyExcel.write(response.getOutputStream(), OrganDonationConsentExcel.class).sheet("會員列表").doWrite(excelData);
+
+//		long endTime3 = System.nanoTime();
+//        System.out.println("第三部分执行时间: " + (endTime3 - startTime3) / 1_000_000_000.0 + " 秒");
+	
 	}
+
+	
 
 	@Override
 	public void downloadWord(Long organDonationConsentId, HttpServletResponse response) throws IOException {
@@ -230,7 +264,7 @@ public class OrganDonationConsentServiceImpl extends ServiceImpl<OrganDonationCo
 					XWPFRun run = runs.get(i);
 					String text = run.getText(0);
 					if (text != null) {
-						System.out.println("當前text: " + text);
+//						System.out.println("當前text: " + text);
 
 						if (text.contains("$")) {
 							// 檢測到佔位符的開始

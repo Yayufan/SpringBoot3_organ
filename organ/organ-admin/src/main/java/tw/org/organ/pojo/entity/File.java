@@ -57,6 +57,10 @@ public class File implements Serializable {
 	@Schema(description = "儲存地址")
 	@TableField("path")
 	private String path;
+	
+	@Schema(description = "外部連結")
+	@TableField("link")
+	private String link;
 
 	@Schema(description = "創建時間")
 	@TableField(value = "create_time", fill = FieldFill.INSERT)
