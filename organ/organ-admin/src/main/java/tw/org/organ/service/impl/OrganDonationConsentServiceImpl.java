@@ -1,8 +1,7 @@
 package tw.org.organ.service.impl;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URLEncoder;
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -15,8 +14,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ResourceUtils;
 
 import com.alibaba.excel.EasyExcel;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -74,22 +74,20 @@ public class OrganDonationConsentServiceImpl extends ServiceImpl<OrganDonationCo
 
 	@Override
 	public IPage<OrganDonationConsent> getAllOrganDonationConsentByStatus(Page<OrganDonationConsent> page,
-			String status, String queryText,LocalDate startDate,LocalDate endDate) {
+			String status, String queryText, LocalDate startDate, LocalDate endDate) {
 
 		LambdaQueryWrapper<OrganDonationConsent> organDonationConsentQueryWrapper = new LambdaQueryWrapper<>();
 
-		
-		
 		// 如果 status 不為空字串、空格字串、Null 時才加入篩選條件
-		organDonationConsentQueryWrapper.eq(
-				StringUtils.isNotBlank(status), OrganDonationConsent::getStatus, status)
+		organDonationConsentQueryWrapper.eq(StringUtils.isNotBlank(status), OrganDonationConsent::getStatus, status)
 				// 當 queryText 不為空字串、空格字串、Null 時才加入篩選條件
 				.and(StringUtils.isNotBlank(queryText),
 						wrapper -> wrapper.like(OrganDonationConsent::getName, queryText).or()
 								.like(OrganDonationConsent::getIdCard, queryText).or()
 								.like(OrganDonationConsent::getContactNumber, queryText).or()
 								.like(OrganDonationConsent::getPhoneNumber, queryText))
-				.between((startDate != null && endDate != null), OrganDonationConsent::getSignatureDate,startDate , endDate)
+				.between((startDate != null && endDate != null), OrganDonationConsent::getSignatureDate, startDate,
+						endDate)
 				.orderByDesc(OrganDonationConsent::getOrganDonationConsentId);
 
 		Page<OrganDonationConsent> organDonationConsentList = baseMapper.selectPage(page,
@@ -150,61 +148,64 @@ public class OrganDonationConsentServiceImpl extends ServiceImpl<OrganDonationCo
 	}
 
 	@Override
-	public void downloadExcel(String startDate,String endDate,HttpServletResponse response) throws IOException {
+	public void downloadExcel(String startDate, String endDate, HttpServletResponse response) throws IOException {
 
 		response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 		response.setCharacterEncoding("utf-8");
 		// 这里URLEncoder.encode可以防止中文乱码 ， 和easyexcel没有关系
 		String fileName = URLEncoder.encode("測試", "UTF-8").replaceAll("\\+", "%20");
 		response.setHeader("Content-disposition", "attachment;filename*=" + fileName + ".xlsx");
-		
 
-		  // 测量第一部分执行时间
+		// 测量第一部分执行时间
 //        long startTime1 = System.nanoTime();
-          // 第一部分代码
-		
-        List<OrganDonationConsent> organDonationConsentList = baseMapper.selectOrganDonationConsentsByDate(startDate,endDate);
-		
+		// 第一部分代码
+
+		List<OrganDonationConsent> organDonationConsentList = baseMapper.selectOrganDonationConsentsByDate(startDate,
+				endDate);
+
 //		long endTime1 = System.nanoTime();
-		
+
 //		System.out.println("第一部分执行时间: " + (endTime1 - startTime1) / 1_000_000_000.0 + " 秒");
-		
+
 		System.out.println("--------接下來轉換數據------------");
-		
-		
-        // 测量第二部分执行时间
+
+		// 测量第二部分执行时间
 //        long startTime2 = System.nanoTime();
-        
+
 		List<OrganDonationConsentExcel> excelData = organDonationConsentList.stream().map(organDonationConsent -> {
 			return organDonationConsentConvert.entityToExcel(organDonationConsent);
 		}).collect(Collectors.toList());
-		
+
 //		long endTime2 = System.nanoTime();
-		
+
 //        System.out.println("第二部分执行时间: " + (endTime2 - startTime2) / 1_000_000_000.0 + " 秒");
 
-		
 		System.out.println("接下來寫入數據");
-		
-		 // 测量第三部分执行时间
+
+		// 测量第三部分执行时间
 //        long startTime3 = System.nanoTime();
 
 		EasyExcel.write(response.getOutputStream(), OrganDonationConsentExcel.class).sheet("會員列表").doWrite(excelData);
 
 //		long endTime3 = System.nanoTime();
 //        System.out.println("第三部分执行时间: " + (endTime3 - startTime3) / 1_000_000_000.0 + " 秒");
-	
-	}
 
-	
+	}
 
 	@Override
 	public void downloadWord(Long organDonationConsentId, HttpServletResponse response) throws IOException {
 
 		// 1、讀取到範本
-		File rootFile = new File(ResourceUtils.getURL("classpath:").getPath()); // 獲取專案的根目錄
-		File templateFile = new File(rootFile, "/word_template/organ_template.docx");
-		try (XWPFDocument word = new XWPFDocument(new FileInputStream(templateFile))) {
+		// File rootFile = new File(ResourceUtils.getURL("classpath:").getPath()); //
+		// 獲取專案的根目錄
+		// File templateFile = new File(rootFile, "/word_template/organ_template.docx");
+		
+		// 因上述方式在生產環境中不生效,所以用下列方式
+		Resource resource = new ClassPathResource("word_template/organ_template.docx");
+
+		// XWPFDocument word = new XWPFDocument(new FileInputStream(templateFile))
+
+		try (InputStream inputStream = resource.getInputStream(); XWPFDocument word = new XWPFDocument(inputStream)) {
 			// 2、根據ID查詢到資料
 			OrganDonationConsent organDonationConsent = baseMapper.selectById(organDonationConsentId);
 			Map<String, String> params = new HashMap<>();
@@ -309,8 +310,7 @@ public class OrganDonationConsentServiceImpl extends ServiceImpl<OrganDonationCo
 					"attachment;filename=" + new String(fileName.getBytes(), "ISO8859-1"));
 			response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 			word.write(response.getOutputStream());
-			
-			
+
 		} catch (Exception e) {
 			System.out.println("發生錯誤 " + e);
 		}

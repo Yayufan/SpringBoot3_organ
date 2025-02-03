@@ -5,6 +5,7 @@
     <select id="selectOrganDonationConsentsByDate" resultType="OrganDonationConsent">
         SELECT * FROM organ_donation_consent
         WHERE signature_date BETWEEN #{startDate} AND #{endDate}
+        AND is_deleted = '0'
     </select>
 
 </mapper>
