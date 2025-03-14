@@ -127,7 +127,7 @@ public class MybatisPlusGeneratedBusinessReplenish {
 	    //策略配置
 	    .strategyConfig(builder -> {
 	    	// 设置需要生成的表名,排除system類的table
-	        builder.addInclude("file","article_attachment")
+	        builder.addInclude("single_page_article","single_page_article_attachment","board_member","time_line")
 	        
 	        .addTablePrefix() // 设置过滤表前缀,  sys_user設置成 user表,一般不用寫
 	        
