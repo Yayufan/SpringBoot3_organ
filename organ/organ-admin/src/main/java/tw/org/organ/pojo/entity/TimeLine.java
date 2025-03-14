@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -36,6 +38,7 @@ public class TimeLine implements Serializable {
     @TableField("year")
     private Integer year;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @Schema(description = "事件日期")
     @TableField("event_date")
     private LocalDate eventDate;
@@ -43,10 +46,6 @@ public class TimeLine implements Serializable {
     @Schema(description = "描述")
     @TableField("description")
     private String description;
-
-    @Schema(description = "多個檔案請用;分號，分隔圖檔路徑")
-    @TableField("image_files")
-    private String imageFiles;
 
     @Schema(description = "創建時間")
     @TableField(value = "create_time", fill = FieldFill.INSERT)

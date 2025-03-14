@@ -135,7 +135,7 @@ public class MinioUtil {
 	 * @param bucketName    桶名稱
 	 * @param path          子路徑 例: example/01/example.jpg
 	 * @param multipartFile 檔案數組
-	 * @return
+	 * @return 儲存路徑列表
 	 */
 	public List<String> upload(String bucketName, String path, MultipartFile[] multipartFile) {
 		List<String> names = new ArrayList<>(multipartFile.length);
