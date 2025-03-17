@@ -6,9 +6,6 @@ import lombok.Data;
 @Data
 public class InsertTimeLineAttachmentDTO {
 	
-	@Schema(description = "主鍵ID")
-	private Long timeLineAttachmentId;
-
 	@Schema(description = "協會年表ID")
 	private Long timeLineId;
 

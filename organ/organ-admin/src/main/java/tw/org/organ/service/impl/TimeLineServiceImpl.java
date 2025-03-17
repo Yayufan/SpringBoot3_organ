@@ -70,25 +70,26 @@ public class TimeLineServiceImpl extends ServiceImpl<TimeLineMapper, TimeLine> i
 		timeLinelambdaQuery.orderByDesc(TimeLine::getYear).orderByDesc(TimeLine::getEventDate);
 
 		Page<TimeLine> timeLinePage = baseMapper.selectPage(pageInfo, timeLinelambdaQuery);
-		
+
 		// 將 TimeLine 轉換成 TimeLineVO
-	    List<TimeLineVO> voList = timeLinePage.getRecords().stream().map(timeLine -> {
-	    	
-	    	TimeLineVO vo = timeLineConvert.entityToVO(timeLine);
-	    	
+		List<TimeLineVO> voList = timeLinePage.getRecords().stream().map(timeLine -> {
+
+			TimeLineVO vo = timeLineConvert.entityToVO(timeLine);
+
 			// 找到附件
 			LambdaQueryWrapper<TimeLineAttachment> queryWrapper = new LambdaQueryWrapper<>();
 			queryWrapper.eq(TimeLineAttachment::getTimeLineId, vo.getTimeLineId());
 			List<TimeLineAttachment> timeLineAttachmentList = timeLineAttachmentMapper.selectList(queryWrapper);
 
-	        vo.setTimeLineAttachment(timeLineAttachmentList);
-	        return vo;
-	    }).collect(Collectors.toList());
+			vo.setTimeLineAttachment(timeLineAttachmentList);
+			return vo;
+		}).collect(Collectors.toList());
 
-	    // 構造返回的分頁結果
-	    Page<TimeLineVO> resultPage = new Page<>(timeLinePage.getCurrent(), timeLinePage.getSize(), timeLinePage.getTotal());
-	    resultPage.setRecords(voList);
-		
+		// 構造返回的分頁結果
+		Page<TimeLineVO> resultPage = new Page<>(timeLinePage.getCurrent(), timeLinePage.getSize(),
+				timeLinePage.getTotal());
+		resultPage.setRecords(voList);
+
 		return resultPage;
 	}
 
@@ -152,6 +153,19 @@ public class TimeLineServiceImpl extends ServiceImpl<TimeLineMapper, TimeLine> i
 	public void deleteTimeLine(Long timeLineId) {
 
 		// 刪除圖片
+		LambdaQueryWrapper<TimeLineAttachment> queryWrapper = new LambdaQueryWrapper<>();
+		queryWrapper.eq(TimeLineAttachment::getTimeLineId, timeLineId);
+		List<TimeLineAttachment> timeLineAttachmentList = timeLineAttachmentMapper.selectList(queryWrapper);
+
+		for (TimeLineAttachment timeLineAttachment : timeLineAttachmentList) {
+			String filePath = timeLineAttachment.getPath();
+			String result = filePath.substring(filePath.indexOf("/", 1));
+
+			// 透過Minio進行刪除
+			minioUtil.removeObject(minioBucketName, result);
+			// 從資料庫刪除附件路徑資料
+			timeLineAttachmentMapper.deleteById(timeLineAttachment.getTimeLineAttachmentId());
+		}
 
 		// 刪除資料
 		baseMapper.deleteById(timeLineId);
