@@ -12,6 +12,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import jakarta.validation.Valid;
 import tw.org.organ.pojo.DTO.InsertTimeLineDTO;
 import tw.org.organ.pojo.DTO.UpdateTimeLineDTO;
+import tw.org.organ.pojo.VO.TimeLineVO;
 import tw.org.organ.pojo.entity.TimeLine;
 
 /**
@@ -31,7 +32,7 @@ public interface TimeLineService extends IService<TimeLine> {
 	 * 
 	 * @return
 	 */
-	List<TimeLine> getAllTimeLine();
+	List<TimeLineVO> getAllTimeLine();
 	
 	/**
 	 * 獲取全部屆數理監事成員(分頁)
@@ -39,7 +40,7 @@ public interface TimeLineService extends IService<TimeLine> {
 	 * @param pageInfo
 	 * @return
 	 */
-	IPage<TimeLine> getAllTimeLine(Page<TimeLine> pageInfo);
+	IPage<TimeLineVO> getAllTimeLine(Page<TimeLine> pageInfo);
 
 	/**
 	 * 獲取單一屆數理監事成員
@@ -47,7 +48,7 @@ public interface TimeLineService extends IService<TimeLine> {
 	 * @param timeLineId
 	 * @return
 	 */
-	TimeLine getTimeLine(Long timeLineId);
+	TimeLineVO getTimeLine(Long timeLineId);
 
 	/**
 	 * 新增理監事成員

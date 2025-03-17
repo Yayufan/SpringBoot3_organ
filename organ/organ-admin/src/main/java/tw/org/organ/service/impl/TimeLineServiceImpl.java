@@ -15,10 +15,13 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import tw.org.organ.convert.TimeLineConvert;
+import tw.org.organ.mapper.TimeLineAttachmentMapper;
 import tw.org.organ.mapper.TimeLineMapper;
 import tw.org.organ.pojo.DTO.InsertTimeLineDTO;
 import tw.org.organ.pojo.DTO.UpdateTimeLineDTO;
+import tw.org.organ.pojo.VO.TimeLineVO;
 import tw.org.organ.pojo.entity.TimeLine;
+import tw.org.organ.pojo.entity.TimeLineAttachment;
 import tw.org.organ.service.TimeLineService;
 import tw.org.organ.utils.MinioUtil;
 
@@ -36,31 +39,75 @@ public class TimeLineServiceImpl extends ServiceImpl<TimeLineMapper, TimeLine> i
 
 	@Value("${minio.bucketName}")
 	private String minioBucketName;
-	
+
 	private static final String MINIO_BUCKET_PATH = "timeLine/";
 
 	private final TimeLineConvert timeLineConvert;
+	private final TimeLineAttachmentMapper timeLineAttachmentMapper;
 	private final MinioUtil minioUtil;
 
 	@Override
-	public List<TimeLine> getAllTimeLine() {
+	public List<TimeLineVO> getAllTimeLine() {
 		List<TimeLine> timeLineList = baseMapper.selectList(null);
-		return timeLineList;
+		List<TimeLineVO> timeLineVOList = timeLineList.stream().map(timeLine -> {
+			TimeLineVO vo = timeLineConvert.entityToVO(timeLine);
+			LambdaQueryWrapper<TimeLineAttachment> queryWrapper = new LambdaQueryWrapper<>();
+			queryWrapper.eq(TimeLineAttachment::getTimeLineId, vo.getTimeLineId());
+
+			List<TimeLineAttachment> timeLineAttachmentList = timeLineAttachmentMapper.selectList(queryWrapper);
+			vo.setTimeLineAttachment(timeLineAttachmentList);
+
+			return vo;
+		}).collect(Collectors.toList());
+
+		return timeLineVOList;
+
 	}
 
 	@Override
-	public IPage<TimeLine> getAllTimeLine(Page<TimeLine> pageInfo) {
+	public IPage<TimeLineVO> getAllTimeLine(Page<TimeLine> pageInfo) {
 		LambdaQueryWrapper<TimeLine> timeLinelambdaQuery = new LambdaQueryWrapper<>();
 		timeLinelambdaQuery.orderByDesc(TimeLine::getYear).orderByDesc(TimeLine::getEventDate);
 
 		Page<TimeLine> timeLinePage = baseMapper.selectPage(pageInfo, timeLinelambdaQuery);
-		return timeLinePage;
+		
+		// 將 TimeLine 轉換成 TimeLineVO
+	    List<TimeLineVO> voList = timeLinePage.getRecords().stream().map(timeLine -> {
+	    	
+	    	TimeLineVO vo = timeLineConvert.entityToVO(timeLine);
+	    	
+			// 找到附件
+			LambdaQueryWrapper<TimeLineAttachment> queryWrapper = new LambdaQueryWrapper<>();
+			queryWrapper.eq(TimeLineAttachment::getTimeLineId, vo.getTimeLineId());
+			List<TimeLineAttachment> timeLineAttachmentList = timeLineAttachmentMapper.selectList(queryWrapper);
+
+	        vo.setTimeLineAttachment(timeLineAttachmentList);
+	        return vo;
+	    }).collect(Collectors.toList());
+
+	    // 構造返回的分頁結果
+	    Page<TimeLineVO> resultPage = new Page<>(timeLinePage.getCurrent(), timeLinePage.getSize(), timeLinePage.getTotal());
+	    resultPage.setRecords(voList);
+		
+		return resultPage;
 	}
 
 	@Override
-	public TimeLine getTimeLine(Long timeLineId) {
+	public TimeLineVO getTimeLine(Long timeLineId) {
+
+		// 找到資料轉換成VO
 		TimeLine timeLine = baseMapper.selectById(timeLineId);
-		return timeLine;
+		TimeLineVO vo = timeLineConvert.entityToVO(timeLine);
+
+		// 找到附件
+		LambdaQueryWrapper<TimeLineAttachment> queryWrapper = new LambdaQueryWrapper<>();
+		queryWrapper.eq(TimeLineAttachment::getTimeLineId, vo.getTimeLineId());
+		List<TimeLineAttachment> timeLineAttachmentList = timeLineAttachmentMapper.selectList(queryWrapper);
+
+		// 組裝VO
+		vo.setTimeLineAttachment(timeLineAttachmentList);
+
+		return vo;
 	}
 
 	@Override
@@ -68,19 +115,23 @@ public class TimeLineServiceImpl extends ServiceImpl<TimeLineMapper, TimeLine> i
 		// 先對檔案進行轉換
 		TimeLine timeLine = timeLineConvert.insertDTOToEntity(insertTimeLineDTO);
 
-		// 如果有上傳檔案
-		if (files != null && files.length > 0) {
-			List<String> pathList = minioUtil.upload(minioBucketName, MINIO_BUCKET_PATH , files);
-
-	        // 在每個 path 前加上 /organ/ 並轉換為分號分隔的字符串
-	        String pathString = pathList.stream()
-	                                    .map(path -> "/" + minioBucketName + "/" + path)
-	                                    .collect(Collectors.joining(";"));
-	        			
-		}
-
 		// 新增資料
 		baseMapper.insert(timeLine);
+
+		// 如果有上傳檔案
+		if (files != null && files.length > 0) {
+			List<String> pathList = minioUtil.upload(minioBucketName, MINIO_BUCKET_PATH, files);
+
+			for (String path : pathList) {
+				TimeLineAttachment timeLineAttachment = new TimeLineAttachment();
+				timeLineAttachment.setTimeLineId(timeLine.getTimeLineId());
+				timeLineAttachment.setPath("/" + minioBucketName + "/" + path);
+				timeLineAttachmentMapper.insert(timeLineAttachment);
+
+			}
+
+		}
+
 		return timeLine.getTimeLineId();
 	}
 

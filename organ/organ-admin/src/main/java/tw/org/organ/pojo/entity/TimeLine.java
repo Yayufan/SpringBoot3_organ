@@ -48,6 +48,7 @@ public class TimeLine implements Serializable {
     private String description;
 
     @Schema(description = "創建時間")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField(value = "create_time", fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
@@ -55,7 +56,9 @@ public class TimeLine implements Serializable {
     @TableField(value = "create_by", fill = FieldFill.INSERT)
     private String createBy;
 
+  
     @Schema(description = "最後更新時間")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField(value = "update_time", fill = FieldFill.UPDATE)
     private LocalDateTime updateTime;
 

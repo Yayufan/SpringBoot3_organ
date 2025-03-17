@@ -30,6 +30,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import tw.org.organ.pojo.DTO.InsertTimeLineDTO;
 import tw.org.organ.pojo.DTO.UpdateTimeLineDTO;
+import tw.org.organ.pojo.VO.TimeLineVO;
 import tw.org.organ.pojo.entity.TimeLine;
 import tw.org.organ.service.TimeLineService;
 import tw.org.organ.utils.R;
@@ -54,25 +55,25 @@ public class TimeLineController {
 
 	@GetMapping("{id}")
 	@Operation(summary = "查詢單一屆協會年表時間線事件")
-	public R<TimeLine> getTimeLine(@PathVariable("id") Long timeLineId) {
-		TimeLine timeLine = timeLineService.getTimeLine(timeLineId);
-		return R.ok(timeLine);
+	public R<TimeLineVO> getTimeLine(@PathVariable("id") Long timeLineId) {
+		TimeLineVO timeLineVO = timeLineService.getTimeLine(timeLineId);
+		return R.ok(timeLineVO);
 	}
 
 	@GetMapping
 	@Operation(summary = "查詢所有協會年表時間線事件")
-	public R<List<TimeLine>> getAllTimeLine() {
-		List<TimeLine> timeLineList = timeLineService.getAllTimeLine();
-		return R.ok(timeLineList);
+	public R<List<TimeLineVO>> getAllTimeLine() {
+		 List<TimeLineVO> timeLineVOList = timeLineService.getAllTimeLine();
+		return R.ok(timeLineVOList);
 	}
 
 	@GetMapping("pagination")
 	@Operation(summary = "查詢所有協會年表時間線事件(分頁)")
-	public R<IPage<TimeLine>> getAllArticle(@RequestParam Integer page, @RequestParam Integer size) {
+	public R<IPage<TimeLineVO>> getAllArticle(@RequestParam Integer page, @RequestParam Integer size) {
 		Page<TimeLine> pageInfo = new Page<>(page, size);
-		IPage<TimeLine> timeLinePage = timeLineService.getAllTimeLine(pageInfo);
+		IPage<TimeLineVO> timeLineVOPage = timeLineService.getAllTimeLine(pageInfo);
 
-		return R.ok(timeLinePage);
+		return R.ok(timeLineVOPage);
 	}
 
 	@Operation(summary = "新增協會年表時間線事件")
@@ -89,7 +90,6 @@ public class TimeLineController {
 		// 這邊objectMapper 註冊 JavaTimeModule，是為了轉換Java 8 的LocalDate 、 LocalDateTime
 		objectMapper.registerModule(new JavaTimeModule());
 		InsertTimeLineDTO insertTimeLineDTO = objectMapper.readValue(jsonData, InsertTimeLineDTO.class);
-
 		Long timeLineId = timeLineService.insertTimeLine(files, insertTimeLineDTO);
 		return R.ok(timeLineId);
 

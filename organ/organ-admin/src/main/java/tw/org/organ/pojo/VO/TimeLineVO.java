@@ -1,19 +1,18 @@
-package tw.org.organ.pojo.DTO;
+package tw.org.organ.pojo.VO;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import tw.org.organ.pojo.entity.TimeLineAttachment;
 
 @Data
-//忽略其他沒有的屬性，避免objectMapper映射失敗
-@JsonIgnoreProperties(ignoreUnknown = true) 
-public class UpdateTimeLineDTO {
-
-	@Schema(description = "主鍵ID")
+public class TimeLineVO {
+	
+    @Schema(description = "主鍵ID")
     private Long timeLineId;
 
     @Schema(description = "ROC民國年，蒐集時要指定105年、106年這樣")
@@ -25,7 +24,7 @@ public class UpdateTimeLineDTO {
 
     @Schema(description = "描述")
     private String description;
-
     
-	
+    @Schema(description = "附件圖片")
+    private List<TimeLineAttachment> timeLineAttachment;
 }
