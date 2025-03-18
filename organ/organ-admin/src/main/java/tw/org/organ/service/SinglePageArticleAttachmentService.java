@@ -1,7 +1,15 @@
 package tw.org.organ.service;
 
-import tw.org.organ.pojo.entity.SinglePageArticleAttachment;
+import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
+
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import tw.org.organ.pojo.DTO.InsertSinglePageArticleAttachmentDTO;
+import tw.org.organ.pojo.entity.SinglePageArticleAttachment;
 
 /**
  * <p>
@@ -12,5 +20,39 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2025-03-14
  */
 public interface SinglePageArticleAttachmentService extends IService<SinglePageArticleAttachment> {
+
+	/**
+	 * 根據單頁文章ID,獲取該文章的所有附件
+	 * 
+	 * @param singlePageArticleId
+	 * @return
+	 */
+	List<SinglePageArticleAttachment> getAllSinglePageArticleAttachmentByArticleId(Long singlePageArticleId);
+
+	/**
+	 * 根據單頁文章ID,獲取該文章的所有附件(分頁)
+	 * 
+	 * @param singlePageArticleId
+	 * @param page
+	 * @return
+	 */
+	IPage<SinglePageArticleAttachment> getAllSinglePageArticleAttachmentByArticleId(Long singlePageArticleId,
+			Page<SinglePageArticleAttachment> page);
+
+	/**
+	 * 新增單頁文章附件
+	 * 
+	 * @param insertSinglePageArticleAttachmentDTO
+	 * @param files
+	 */
+	void insertSinglePageArticleAttachment(InsertSinglePageArticleAttachmentDTO insertSinglePageArticleAttachmentDTO,
+			MultipartFile[] files);
+
+	/**
+	 * 根據singlePageArticleAttachmentId刪除文章附件
+	 * 
+	 * @param singlePageArticleAttachmentId
+	 */
+	void deleteSinglePageArticleAttachment(Long singlePageArticleAttachmentId);
 
 }

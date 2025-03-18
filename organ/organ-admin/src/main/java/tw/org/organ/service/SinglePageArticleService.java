@@ -18,7 +18,8 @@ public interface SinglePageArticleService extends IService<SinglePageArticle> {
 
 
 	/**
-	 * 根據路徑,獲取單一單頁文章
+	 * 根據路徑,獲取單一單頁文章，For後台
+	 * 如果沒有這個路徑則會立刻創建
 	 * 
 	 * @param singlePageArticleId
 	 * @return

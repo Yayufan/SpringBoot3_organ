@@ -47,7 +47,6 @@ public interface ArticleAttachmentService extends IService<ArticleAttachment> {
 	 */
 	void insertArticleAttachment(InsertArticleAttachmentDTO insertArticleAttachmentDTO, MultipartFile[] files);
 
-	
 	/**
 	 * 根據articleAttachmentId刪除文章附件
 	 * 
