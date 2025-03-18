@@ -94,6 +94,44 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
 
 		System.out.println("上傳完成");
 	}
+	
+	
+	@Override
+	public void addFile(MultipartFile[] files, MultipartFile[] imgFiles, InsertFileDTO insertFileDTO) {
+		File fileEntity = fileConvert.insertDTOToEntity(insertFileDTO);
+
+		// 文件檔案存在，處理檔案
+		if (files != null && files.length > 0) {
+
+			List<String> upload = minioUtil.upload(minioBucketName, insertFileDTO.getGroupType() + "/", files);
+			// 基本上只有有一個檔案跟著formData上傳,所以這邊直接寫死,把唯一的url增添進對象中
+			String url = upload.get(0);
+			// 將bucketName 組裝進url
+			url = "/" + minioBucketName + "/" + url;
+			// minio完整路徑放路對象中
+			fileEntity.setPath(url);
+
+		}
+		
+		// 縮圖檔案存在，處理檔案
+		if (imgFiles != null && imgFiles.length > 0) {
+
+			List<String> upload = minioUtil.upload(minioBucketName, insertFileDTO.getGroupType() + "/", imgFiles);
+			// 基本上只有有一個縮圖檔案跟著formData上傳,所以這邊直接寫死,把唯一的url增添進對象中
+			String url = upload.get(0);
+			// 將bucketName 組裝進url
+			url = "/" + minioBucketName + "/" + url;
+			// minio完整路徑放路對象中
+			fileEntity.setCoverThumbnailUrl(url);
+		}
+		
+
+		// 放入資料庫
+		baseMapper.insert(fileEntity);
+
+		System.out.println("上傳完成");
+		
+	}
 
 	@Override
 	public void deleteFile(Long fileId) {
@@ -122,6 +160,8 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
 		}
 
 	}
+
+
 
 
 

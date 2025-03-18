@@ -12,6 +12,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import jakarta.validation.Valid;
 import tw.org.organ.pojo.DTO.InsertTimeLineDTO;
 import tw.org.organ.pojo.DTO.UpdateTimeLineDTO;
+import tw.org.organ.pojo.VO.TimeLineFrontVO;
 import tw.org.organ.pojo.VO.TimeLineVO;
 import tw.org.organ.pojo.entity.TimeLine;
 
@@ -28,14 +29,21 @@ import tw.org.organ.pojo.entity.TimeLine;
 public interface TimeLineService extends IService<TimeLine> {
 
 	/**
-	 * 獲取全部屆數理監事成員
+	 * 獲取前端顯示的協會年表
+	 * 
+	 * @return
+	 */
+	List<TimeLineFrontVO> getAllTimeLineFrontVO();
+	
+	/**
+	 * 獲取全部協會年表事件
 	 * 
 	 * @return
 	 */
 	List<TimeLineVO> getAllTimeLine();
 	
 	/**
-	 * 獲取全部屆數理監事成員(分頁)
+	 * 獲取全部協會年表事件(分頁)
 	 * 
 	 * @param pageInfo
 	 * @return
@@ -43,7 +51,7 @@ public interface TimeLineService extends IService<TimeLine> {
 	IPage<TimeLineVO> getAllTimeLine(Page<TimeLine> pageInfo);
 
 	/**
-	 * 獲取單一屆數理監事成員
+	 * 獲取單一協會年表事件
 	 * 
 	 * @param timeLineId
 	 * @return
@@ -51,7 +59,7 @@ public interface TimeLineService extends IService<TimeLine> {
 	TimeLineVO getTimeLine(Long timeLineId);
 
 	/**
-	 * 新增理監事成員
+	 * 新增協會年表事件
 	 * 
 	 * @param insertTimeLineDTO
 	 */

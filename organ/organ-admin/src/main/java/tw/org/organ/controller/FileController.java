@@ -81,14 +81,33 @@ public class FileController {
 			@Parameter(name = "data", description = "JSON 格式的檔案資料", required = true, in = ParameterIn.QUERY, schema = @Schema(implementation = InsertFileDTO.class))})
 	@SaCheckLogin
 	@Operation(summary = "新增檔案至某個類別")
-	public R<Void> addFile(@RequestParam("file") MultipartFile[] file, @RequestParam("data") String jsonData)
+	public R<Void> addFile(
+			@RequestParam("file") MultipartFile[] files,
+			@RequestParam(value="imgFile",required = false) MultipartFile[] imgFiles,
+			@RequestParam("data") String jsonData)
 			throws JsonMappingException, JsonProcessingException {
 		// 將 JSON 字符串轉為對象
 		ObjectMapper objectMapper = new ObjectMapper();
 		InsertFileDTO insertFileDTO = objectMapper.readValue(jsonData, InsertFileDTO.class);
 
+		if(files != null && files.length > 0) {
+			System.out.println("有文檔檔案");
+			for (MultipartFile multipartFile : files) {
+				System.out.println(multipartFile.getContentType());
+				System.out.println(multipartFile.getOriginalFilename());
+			}
+		}
+		
+		if(imgFiles != null && imgFiles.length > 0) {
+			System.out.println("有縮圖檔案");
+			for (MultipartFile multipartFile : imgFiles) {
+				System.out.println(multipartFile.getContentType());
+				System.out.println(multipartFile.getOriginalFilename());
+			}
+		}
+		
 		// 將檔案和資料對象傳給後端
-		fileService.addFile(file, insertFileDTO);
+		fileService.addFile(files,imgFiles, insertFileDTO);
 
 		return R.ok();
 	}

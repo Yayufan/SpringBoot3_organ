@@ -58,6 +58,10 @@ public class File implements Serializable {
 	@TableField("path")
 	private String path;
 	
+	@Schema(description = "縮圖地址")
+	@TableField("cover_thumbnail_url")
+	private String coverThumbnailUrl;
+	
 	@Schema(description = "外部連結")
 	@TableField("link")
 	private String link;

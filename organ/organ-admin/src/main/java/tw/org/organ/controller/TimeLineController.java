@@ -30,6 +30,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import tw.org.organ.pojo.DTO.InsertTimeLineDTO;
 import tw.org.organ.pojo.DTO.UpdateTimeLineDTO;
+import tw.org.organ.pojo.VO.TimeLineFrontVO;
 import tw.org.organ.pojo.VO.TimeLineVO;
 import tw.org.organ.pojo.entity.TimeLine;
 import tw.org.organ.service.TimeLineService;
@@ -53,6 +54,13 @@ public class TimeLineController {
 
 	private final TimeLineService timeLineService;
 
+	@GetMapping("tree")
+	@Operation(summary = "查詢所有協會年表時間線事件-依年份分組(樹狀結構)")
+	public R<List<TimeLineFrontVO>> getAllTimeLineTree() {
+		  List<TimeLineFrontVO> allTimeLineFrontVO = timeLineService.getAllTimeLineFrontVO();
+		return R.ok(allTimeLineFrontVO);
+	}
+	
 	@GetMapping("{id}")
 	@Operation(summary = "查詢單一屆協會年表時間線事件")
 	public R<TimeLineVO> getTimeLine(@PathVariable("id") Long timeLineId) {

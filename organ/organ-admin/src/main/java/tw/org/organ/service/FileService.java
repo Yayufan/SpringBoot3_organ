@@ -27,7 +27,9 @@ public interface FileService extends IService<File> {
 	
 	IPage<File> getAllFileByGroup(String group, Page<File> pageInfo);
 
-	void addFile(MultipartFile[] file, InsertFileDTO insertFileDTO);
+	void addFile(MultipartFile[] files,MultipartFile[] imgFiles, InsertFileDTO insertFileDTO);
+	
+	void addFile(MultipartFile[] files, InsertFileDTO insertFileDTO);
 
 	void deleteFile(Long fileId);
 
