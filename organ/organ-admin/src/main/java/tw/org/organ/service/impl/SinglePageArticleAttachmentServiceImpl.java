@@ -45,7 +45,7 @@ public class SinglePageArticleAttachmentServiceImpl
 	@Override
 	public List<SinglePageArticleAttachment> getAllSinglePageArticleAttachmentByArticleId(Long singlePageArticleId) {
 		LambdaQueryWrapper<SinglePageArticleAttachment> articleAttachmentQueryWrapper = new LambdaQueryWrapper<>();
-		articleAttachmentQueryWrapper.eq(SinglePageArticleAttachment::getSignlePageArticleId, singlePageArticleId);
+		articleAttachmentQueryWrapper.eq(SinglePageArticleAttachment::getSinglePageArticleId, singlePageArticleId);
 		List<SinglePageArticleAttachment> singlePageArticleAttachmentList = singlePageArticleAttachmentMapper
 				.selectList(articleAttachmentQueryWrapper);
 		return singlePageArticleAttachmentList;
@@ -55,7 +55,7 @@ public class SinglePageArticleAttachmentServiceImpl
 	public IPage<SinglePageArticleAttachment> getAllSinglePageArticleAttachmentByArticleId(Long singlePageArticleId,
 			Page<SinglePageArticleAttachment> page) {
 		LambdaQueryWrapper<SinglePageArticleAttachment> articleAttachmentQueryWrapper = new LambdaQueryWrapper<>();
-		articleAttachmentQueryWrapper.eq(SinglePageArticleAttachment::getSignlePageArticleId, singlePageArticleId);
+		articleAttachmentQueryWrapper.eq(SinglePageArticleAttachment::getSinglePageArticleId, singlePageArticleId);
 		Page<SinglePageArticleAttachment> articleAttachmentPage = singlePageArticleAttachmentMapper.selectPage(page,
 				articleAttachmentQueryWrapper);
 		return articleAttachmentPage;
