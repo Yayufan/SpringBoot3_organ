@@ -49,6 +49,8 @@ public class SinglePageArticleServiceImpl extends ServiceImpl<SinglePageArticleM
 		if (singlePageArticle == null) {
 			SinglePageArticle emptySinglePageArticle = new SinglePageArticle();
 			emptySinglePageArticle.setPath(path);
+			// 這行主要是避免前端CKEditor 因為 content 為null 而報錯
+			emptySinglePageArticle.setContent("");
 			baseMapper.insert(emptySinglePageArticle);
 			return emptySinglePageArticle;
 		}
