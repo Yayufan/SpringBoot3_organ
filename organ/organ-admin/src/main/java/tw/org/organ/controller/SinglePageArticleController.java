@@ -43,6 +43,13 @@ public class SinglePageArticleController {
 		return R.ok(singlePageArticle);
 	}
 	
+	@GetMapping("show/by-path")
+	@Operation(summary = "根據path，查詢單一頁面文章(For形象頁面)")
+	public R<SinglePageArticle> getSinglePageArticleShow(@RequestParam("path") String path) {
+		SinglePageArticle singlePageArticle = singlePageArticleService.getShowSinglePageArticle(path);
+		return R.ok(singlePageArticle);
+	}
+	
 	@Operation(summary = "更新單一頁面文章")
 	@Parameters({
 			@Parameter(name = "Authorization", description = "請求頭token,token-value開頭必須為Bearer ", required = true, in = ParameterIn.HEADER) })
