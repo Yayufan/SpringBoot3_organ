@@ -69,23 +69,28 @@ public class AsyncRedisArticleViewsToMysqlTask {
 
 			// System.out.println("key為: " + key);
 			// System.out.println("value為: " + articleViews);
+			if (articleViews > 0) { // 如果有瀏覽量才執行更新
+	            String[] parts = key.split(":");
+	            String id = parts[3];
+	            Long longTypeId = Long.valueOf(id);
 
-			// 解析 key
-			String[] parts = key.split(":");
-			// String category = parts[1];
-			String id = parts[3];
+	            // 查詢資料庫中的原始瀏覽量
+	            Article article = articleMapper.selectById(longTypeId);
+	            if (article != null) {
+	                Integer newTotalViews = article.getViews() + articleViews.intValue();
 
-			Long longTypeId = Long.valueOf(id);
+	                // 使用 updateWrapper 來避免自動填充問題
+	                LambdaUpdateWrapper<Article> articleUpdateWrapper = new LambdaUpdateWrapper<>();
+	                articleUpdateWrapper.eq(Article::getArticleId, longTypeId)
+	                                    .set(Article::getViews, newTotalViews);
 
-			// id 從String 轉為Long
+	                // 執行更新操作
+	                articleMapper.update(articleUpdateWrapper);
+	            }
+	        }
 
-			// 這邊使用updateWrapper 是因為這個東西不會觸發自動填充
-			LambdaUpdateWrapper<Article> articleUpdateWrapper = new LambdaUpdateWrapper<>();
-			articleUpdateWrapper.eq(Article::getArticleId, longTypeId) // 設置條件
-					.set(Article::getViews, articleViews); // 設置要更新的字段和值
-
-			// 執行更新操作
-			articleMapper.update(articleUpdateWrapper);
+	        // 刪除 Redis 的瀏覽量鍵
+	        keys.delete(key);
 
 		}
 	}
